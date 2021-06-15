@@ -1,0 +1,65 @@
+
+monitor libgen (sci-hub) health.
+e.g. number of seeders per torrent
+
+## about libgen data and torrents
+* libgen consists of a few different catalogues of files
+there appear to be:
+  standards, comics, fiction, magazines, scimag, fiction_rus
+
+### magazines (external)
+* 580 290 files
+* 13.496 terabytes
+* apparently, see http://magzdb.org/
+
+### scimag
+* http://libgen.gs/scimag/index.php?s=test
+* also currently https://sci-hub.do/
+* also knows as sci-hub?
+* 100k files in torrent
+* more than 85,483,812 papers
+* src and example: http://gen.lib.rus.ec/scimag/repository_torrent/sm_00000000-00099999.torrent
+
+### fiction
+* 1000 files are on torrent
+* see http://libgen.rs/fiction/repository_torrent/
+* f -> fiction
+* f_0 - f_2327000.torrent
+
+### r?
+* http://libgen.rs/repository_torrent/
+* r -> ???????
+* t_000.torrent - r_2999000.torrent
+
+### fiction_rus
+* ???
+
+
+## Libgen - Social
+* https://libgen.life/ Some comunity forum
+* https://news.ycombinator.com/item?id=21692222
+
+
+
+## Technical stuff
+
+multiple seperate jobs:
+* fetch new torrents & put into sqlite
+* monitor torrents
+* build overview
+* offere api like interface
+
+
+### there are a few ways to find seeder
+* DHT
+* from trackers
+* LSD
+
+### info
+UDP NAT PUNCH https://github.com/inconshreveable/ngrok/issues/26#issuecomment-69535251
+https://en.wikipedia.org/wiki/Kademlia
+https://en.wikipedia.org/wiki/Internet_Gateway_Device_Protocol
+
+### tools
+https://github.com/arvidn/torrent-tools > torrent-print > print the content of a .torrent file to stdout
+https://github.com/arvidn/bootstrap-dht

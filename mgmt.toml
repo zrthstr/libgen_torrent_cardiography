@@ -1,0 +1,13 @@
+
+[catalogue]
+
+	[catalogue.r]
+	known_missing  = [81000, 82000]
+	#src = http://libgen.rs/repository_torrent/
+	#dir = "data/torrent/r"
+
+	[catalogue.fiction]
+	known_missing  = []
+	#srv = http://libgen.rs/ficton/repository_torrent/
+	#dir = "data/torrent/fiction"
+
