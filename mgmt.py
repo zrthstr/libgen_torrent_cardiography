@@ -98,16 +98,16 @@ class Tor:
 
     @staticmethod
     def populate(count=1, col="r", only_count_absent=False):
-        base = Tor.newest() + 1
+        base = Tor.newest()
         for n in range(0,count):
-            newest = base + n
-            print("[debug] populate :", n, base, newest)
+            next_one = base + n
+            print("[debug] populate :", n, base, next_one)
 
-            if Tor.is_known_missing(newest):
-                print(".", newest)
+            if Tor.is_known_missing(next_one):
+                print("[debug] known missing", next_one)
                 continue
 
-            new_tor = Tor(newest)
+            new_tor = Tor(next_one)
             #if new_tor.exists_in_db:
             #    print(f"Found {new_tor.id} in db. Skipping")
             #    continue
@@ -116,9 +116,8 @@ class Tor:
             #new_tor.get_from_file()
             #new_tor.save()
 
-
     def generate_libgen_torrent_filename(self):
-        name = (self.id - 1 ) * 1000
+        name = (self.id ) * 1000
         return f"r_{name:03}.torrent"
 
     def get_http(self):
@@ -235,6 +234,9 @@ class Tor:
                         datetime=datetime.utcnow()))
 
     def is_known_missing( newest, col="r"):
+        ### TOFIX
+        newest -= 1
+        newest += 1
         return newest *1000 in config["catalogue"]["r"]["known_missing"]
 
 

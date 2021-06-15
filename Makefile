@@ -19,5 +19,7 @@ mgmt:
 rm_mgmt_db:
 	rm data/ltc.sqlite
 
+restart: rm_mgmt_db mgmt
+
 dbinfo:
 	bash dbinfo.sh

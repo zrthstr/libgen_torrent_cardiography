@@ -21,8 +21,8 @@ def get_swarm_info(info_hash, trackers):
     from ttsfix import scraper
     scraper = scraper.Scraper(
             infohashes=[info_hash,],
-            trackers=trackers,
-            #trackers=["udp//:tracker.opentrackr.org:1337"],
+            #trackers=trackers,
+            trackers=["udp//:tracker.opentrackr.org:1337"],
             )
     results = scraper.scrape()
     return results
