@@ -23,3 +23,6 @@ restart: rm_mgmt_db mgmt
 
 dbinfo:
 	bash tools/dbinfo.sh
+
+dbdump:
+	bash tools/dbdump.sh

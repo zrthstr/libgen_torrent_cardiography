@@ -50,9 +50,11 @@ multiple seperate jobs:
 * offere api like interface
 
 
-### there are a few ways to find seeder
-* DHT
+### there are a few ways to find seeder/peers
+* DHT/PEX
 * from trackers
+	* TCP/HTTP
+	* UDP/Infowire   https://www.bittorrent.org/beps/bep_0015.html
 * LSD
 
 ### info
