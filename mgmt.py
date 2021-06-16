@@ -42,35 +42,27 @@ class Tor:
         self.url = self.TORRENT_SRC + self.file_name
 
         ## lets check if exists in db. if not create?
-        print("file_name", self.file_name)
-        ttt = torrent.find_one(file_name=self.file_name)
-        if ttt:
-            # EXISTS! lets load  TODO Rename ttt
-            print(ttt)
-            self.infohash = ttt["infohash"]
-            self.seed_count = ttt["seed_count"]
-            self.chk_fail_last = ttt["chk_fail_last"]
-            self.chk_fail_count = ttt["chk_fail_count"]
-            self.chk_success_last = ttt["chk_success_last"]
-            self.chk_success_count = ttt["chk_success_count"]
+        #print("file_name", self.file_name)
 
+        tor = torrent.find_one(file_name=self.file_name)
 
-        else:
-            ## DOESNT EXCIST! lets create new
+        #if tor:
+        #    print(f"[debug] obj exits in db")
+
+        if not tor:
+            print(f"[debug] obj does NOT exits in db")
             self.get_from_file()
             self.save_to_db()
-            ### NOW load values?
+            tor = torrent.find_one(file_name=self.file_name)
 
-            ## TODO dedup
-            ttt = torrent.find_one(file_name=self.file_name)
-            print("file_name", self.file_name)
-            print("saved thing is now", ttt)
-            self.infohash = ttt["infohash"]
-            self.seed_count = ttt["seed_count"]
-            self.chk_fail_last = ttt["chk_fail_last"]
-            self.chk_fail_count = ttt["chk_fail_count"]
-            self.chk_success_last = ttt["chk_success_last"]
-            self.chk_success_count = ttt["chk_success_count"]
+            #print("saved thing is now", tor)
+
+        self.infohash = tor["infohash"]
+        self.seed_count = tor["seed_count"]
+        self.chk_fail_last = tor["chk_fail_last"]
+        self.chk_fail_count = tor["chk_fail_count"]
+        self.chk_success_last = tor["chk_success_last"]
+        self.chk_success_count = tor["chk_success_count"]
 
         #self._fetch(self)
         #self._process(self)
@@ -108,6 +100,7 @@ class Tor:
                 continue
 
             new_tor = Tor(next_one)
+
             #if new_tor.exists_in_db:
             #    print(f"Found {new_tor.id} in db. Skipping")
             #    continue
@@ -348,11 +341,12 @@ config = load_config()
 #print(config)
 
 #Tor.integrety_check_libgen()
-Tor.populate(count=160, only_count_absent=True)
+#Tor.populate(count=160, only_count_absent=True)
 #Tor.peer_crawl()
 
 
 ttt = Tor(10)
+#ttt = Tor(11)
 print(ttt)
 ttt.info()
 
