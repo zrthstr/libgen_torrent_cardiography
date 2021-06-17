@@ -76,54 +76,91 @@ class Torrent_collection:
         return newest *1000 in self.config["catalogue"]["r"]["known_missing"]
 
 
+    def is_str_timeout(self, msg):
+        if isinstance(msg, str):
+            if msg.startswith("Socket timeout for"):
+                print("[Debug] just a timeout")
+                return True
+            else:
+                print("[Debug] is not timeout")
+                return False
+        else:
+            print("[Debug] Is not str")
+            return False
+
+
+    def is_list_with_only_timeout(self, msg):
+        if isinstance(msg,list):
+            if len(msg) == 1:
+                if self.is_str_timeout(msg[0]):
+                    return True
+                print("[Debug] is list with only one memebr but not 'Socket timeout for..'")
+            print("[Debug] is list but more than 1 members")
+        return False
+
+
     def peer_exchange_m(self, info_hash_list):
         tracker_collection = Tracker_collection(self.db)
 
         all_tracker = tracker_collection.all()
         print("all tracker", all_tracker)
         print("all infohash", info_hash_list)
-        #exit()
 
         scr = scraper.Scraper(
             timeout=5,
             infohashes=info_hash_list,
             trackers=all_tracker,
-            #trackers=["udp//:tracker.opentrackr.org:1337"],
             )
         results = scr.scrape()
 
-        print("xxx" * 100)
+        from collections import defaultdict
+        max_seed = defaultdict(int)
+        max_leetch = defaultdict(int)
+        timeouts = []
+
+        # data is a bit messy
+        # we can get a list with errors
+        # or a dict with a dict of erros
+        # or a dict with list of real_results, we only want this
+
         for r in results:
-            if isinstance(r,list):
-                if len(r) == 1:
-                    if r[0].startswith("Socket timeout for"):
-                        print("just a timeout")
-                        continue
-                print("Unknow errro list:", r)
-                exit()
+            #print("ra" * 100)
+            #print(r)
+            #print("re" * 100)
+
+            if self.is_list_with_only_timeout(r):
+                timeouts.append(r)
+                continue
 
             elif isinstance(r, dict):
-                #print(r)
-                print("######tracker")
-                print(type(r["tracker"]))
-                print(r["tracker"])
-
-                #print("######result")
-                #print(type(r["results"]))
-                #print(r["results"])
+                if isinstance(r["results"], dict):
+                    if self.is_list_with_only_timeout(r["results"]):
+                        continue
+                    print("whit thee fuck is this a dict")
+                    exit()
+                if not isinstance(r["results"], list):
+                    print("[ERROR] this should not happen. r['results'] is not list not error dict")
+                    print("r['results']:::",r['results'])
+                    exit()
 
                 for rr in r["results"]:
-                    print(rr)
-                    ## TODO
-                    ## 
-                    ##
-                    #update_torrent(**rr)
+                    #print("rr:",rr)
+                    if isinstance(rr, str):
+                        if self.is_str_timeout(rr):
+                            print("Debug: got rid of timout")
+                            timeouts.append(rr)
+                            continue
 
-                #exit()
+                    max_seed[rr["infohash"]] = max( rr["seeders"], max_seed[rr["infohash"]])
+                    max_leetch[rr["infohash"]] = max( rr["seeders"], max_leetch[rr["infohash"]])
+
             else:
-                print("unknown error type ", type(r), r)
+                print("[Debug] unknown error type ", type(r), r)
                 exit()
 
+        print(max_seed)
+        print(max_leetch)
+        print(timeouts)
         exit()
         return results
 
