@@ -1,18 +1,17 @@
-class Tracker:
-    def __init__(self):
-        pass
-    @staticmethod
-    def all(db):
-        return [t["name"] for t in db["tracker"].find()]
+### https://codereview.stackexchange.com/questions/64671/sharing-a-database-connection-with-multiple-modules
+### https://softwareengineering.stackexchange.com/a/358061
+
 
 ## TODO 
+## TODO
+## TODO
 ## TODO
 ## TODO
 ## TODO
 ## fix db, then split objs
 
 
-class Tracker_new:
+class Tracker:
     def __init__(self, db):
         self.name = "" # url???
         self.db = db
@@ -30,7 +29,7 @@ class Tracker_collection:
         self.tracker = []
         self.db = db
 
-    def add(self, tracker):
+    def add(self, tracker)
         self.tracker.append(tracker)
 
     def all(self):

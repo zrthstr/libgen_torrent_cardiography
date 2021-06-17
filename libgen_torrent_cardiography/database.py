@@ -1,17 +1,18 @@
-#import toml
+
 import dataset
-#import requests
-#import libtorrent as lt
-#from pathlib import Path
-from datetime import datetime
 
+class Database:
 
-
-class Db:
-    def __init__(self, db):
+    def __init__(self):
+        db = self.connect()
         self.tracker = db['tracker']
         self.torrent = db['torrent']
         self.log = db['log']
+
+
+    def connect(self):
+        # TODO, get this value from config file
+        return dataset.connect('sqlite:///data/ltc.sqlite')
 
         if self.tracker.find_one() == None:
             print("[+] init.db.tracker")
@@ -41,6 +42,7 @@ class Db:
             self.log.create_column('status', db.types.text)
             self.log.create_column('datetime', db.types.datetime)
 
+
     def count_and_print(self, table):
         print(f"[i] table {table.name} has {table.count()} rows with columns:")
         print(f"    {table.columns}")
@@ -52,6 +54,7 @@ class Db:
             self.count_and_print(table)
 
     def integrety_chk(self):
+        print("this __SHOULD__ be and integrety check")
         ### make sure:
         ### * no torrents are missingeg
         ###     e.g. make sure that if we notice 0,1,2 and 4 but not 3
