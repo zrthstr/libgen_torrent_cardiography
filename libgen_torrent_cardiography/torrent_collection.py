@@ -27,10 +27,10 @@ class Torrent_collection:
         self.base_url = self.TORRENT_SRC
 
         self.db = db
-        ### TODO remove this block rrplace with dirrect ref
-        self.tracker_db = db.tracker
-        self.torrent_db = db.torrent
-        self.log_db = db.log
+
+        #self.db.tracker = db.tracker
+        #self.db.torrent = db.torrent
+        #self.db.log = db.log
 
         self.members = self._load_all_from_db()
 
@@ -40,13 +40,13 @@ class Torrent_collection:
 
 
     def _load_all_from_db(self):
-        return [ tor for tor in self.torrent_db.find()]
+        return [ tor for tor in self.db.torrent.find()]
 
 
     def newest(self):
         ## TODO, chek if "-" or "" is correct
         #last = torrent.find_one(order_by='-file_name')
-        last = self.torrent_db.find_one(order_by='-id')
+        last = self.db.torrent.find_one(order_by='-id')
         if last == None:
             return 0
         else:
@@ -76,11 +76,16 @@ class Torrent_collection:
         return newest *1000 in self.config["catalogue"]["r"]["known_missing"]
 
 
-    def peer_exchange_m(db, info_hash_list):
-        all_tracker = Tracker.all(db)
-        print(f"all tracker: {all_tracker}")
+    def peer_exchange_m(self, info_hash_list):
+        tracker_collection = Tracker_collection(self.db)
+
+        all_tracker = tracker_collection.all()
+        print("all tracker", all_tracker)
+        print("all infohash", info_hash_list)
+        #exit()
+
         scr = scraper.Scraper(
-            timeout=2,
+            timeout=5,
             infohashes=info_hash_list,
             trackers=all_tracker,
             #trackers=["udp//:tracker.opentrackr.org:1337"],
@@ -103,9 +108,9 @@ class Torrent_collection:
                 print(type(r["tracker"]))
                 print(r["tracker"])
 
-                print("######result")
-                print(type(r["results"]))
-                print(r["results"])
+                #print("######result")
+                #print(type(r["results"]))
+                #print(r["results"])
 
                 for rr in r["results"]:
                     print(rr)
@@ -114,7 +119,7 @@ class Torrent_collection:
                     ##
                     #update_torrent(**rr)
 
-                exit()
+                #exit()
             else:
                 print("unknown error type ", type(r), r)
                 exit()
@@ -122,37 +127,20 @@ class Torrent_collection:
         exit()
         return results
 
-    def peer_crawl(db, config, count=1):
+    def peer_crawl(self, count=1, limit=60):
         print(f"this is a crawl party!!")
         for n in range(0,count):
 
-            #oldest = db["torrent"].find(order_by='chk_success_last').__next__() # maybe -chk..
+            # TODO move limit to CONFIG
+            oldest_n = self.db.torrent.find(order_by='chk_success_last', _limit=limit)
 
-            ## obj
-            oldest = db["torrent"].find_one(order_by='chk_success_last')
-
-            ## list
-            oldest_n = db["torrent"].find(order_by='chk_success_last', _limit=60)
             oldest_n_ih = [ t["infohash"] for t in oldest_n ]
             print(oldest_n_ih)
 
-            #Tor.peer_exchange()
-            Tor.peer_exchange_m(db, oldest_n_ih)  ## TOTO RNAME
+            self.peer_exchange_m(oldest_n_ih)  ## TOTO RNAME
 
-            #print(oldest["id"], oldest["infohash"])
-            #tor = Tor(oldest["id"], db, config)
 
-            #tor.peer_exchange_m(oldes_n_ih)  ## TOTO RNAME
-
-            # get least fresh torrent
-            # try to fetch peer info
-            # save peer info and update stats
-            # move to next
-
-    def least_fresh():
-        pass
-
-    def chk_for_new():
+    def chk_for_new(self):
         pass
 
     def integrety_check_libgen(self):

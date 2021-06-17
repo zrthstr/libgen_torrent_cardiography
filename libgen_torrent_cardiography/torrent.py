@@ -37,6 +37,7 @@ class Torrent:
 
         self.infohash = tor["infohash"]
         self.seed_count = tor["seed_count"]
+        self.leetch_count = tor["leetch_count"]
         self.chk_fail_last = tor["chk_fail_last"]
         self.chk_fail_count = tor["chk_fail_count"]
         self.chk_success_last = tor["chk_success_last"]
@@ -47,6 +48,7 @@ class Torrent:
         print(f"Info on torrent: {self.file_name}")
         print(f"    infohash:                {self.infohash}")
         print(f"    seed_count:              {self.seed_count}")
+        print(f"    leetch_count:            {self.leetch_count}")
         print(f"    id:                      {self.id}")
         print(f"    full_path:               {self.full_path}")
         print(f"    url:                     {self.url}")
@@ -121,7 +123,7 @@ class Torrent:
                                 chk_fail_count=0,
                                 chk_fail_last=None,
                                 ))
-        log.insert(dict(name=self.file_name,
+        self.db.log.insert(dict(name=self.file_name,
             status=f"added trackers: {len(tracker_new)}",
                         datetime=datetime.utcnow()))
 

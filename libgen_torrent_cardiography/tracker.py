@@ -1,18 +1,4 @@
 class Tracker:
-    def __init__(self):
-        pass
-    @staticmethod
-    def all(db):
-        return [t["name"] for t in db["tracker"].find()]
-
-## TODO 
-## TODO
-## TODO
-## TODO
-## fix db, then split objs
-
-
-class Tracker_new:
     def __init__(self, db):
         self.name = "" # url???
         self.db = db
@@ -27,16 +13,15 @@ class Tracker_new:
 
 class Tracker_collection:
     def __init__(self, db):
-        self.tracker = []
+        #mself.tracker = []
         self.db = db
 
     def add(self, tracker):
         self.tracker.append(tracker)
 
     def all(self):
-        return [t["name"] for t in db["tracker"].find()]
+        return [t["name"] for t in self.db.tracker.find()]
 
     def count(self):
         return db["tracker"].count()
-
 

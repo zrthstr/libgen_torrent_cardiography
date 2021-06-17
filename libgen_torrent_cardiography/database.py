@@ -4,43 +4,47 @@ import dataset
 class Database:
 
     def __init__(self):
-        db = self.connect()
-        self.tracker = db['tracker']
-        self.torrent = db['torrent']
-        self.log = db['log']
+        self.db = self.connect()
+        self.tracker = self.db['tracker']
+        self.torrent = self.db['torrent']
+        self.log = self.db['log']
+
+        self.chk_schema()
 
 
     def connect(self):
         # TODO, get this value from config file
         return dataset.connect('sqlite:///data/ltc.sqlite')
 
+    def chk_schema(self):
         if self.tracker.find_one() == None:
             print("[+] init.db.tracker")
-            self.tracker.create_column('name', db.types.text)
-            self.tracker.create_column('chk_success_count', db.types.integer)
-            self.tracker.create_column('chk_fail_count', db.types.integer)
-            self.tracker.create_column('chk_fail_last', db.types.datetime)
-            self.tracker.create_column('chk_success_last', db.types.datetime)
+            self.tracker.create_column('name', self.db.types.text)
+            self.tracker.create_column('chk_success_count', self.db.types.integer)
+            self.tracker.create_column('chk_fail_count', self.db.types.integer)
+            self.tracker.create_column('chk_fail_last', self.db.types.datetime)
+            self.tracker.create_column('chk_success_last', self.db.types.datetime)
             # tracker.create_index(["name"])
             # foo.create_column('foo', unique=True)
 
         if self.torrent.find_one() == None:
             print("[+] init.db.torrent")
-            self.torrent.create_column('file_name', db.types.text)
-            self.torrent.create_column('seed_count', db.types.integer)
-            self.torrent.create_column('chk_fail_last', db.types.datetime)
-            self.torrent.create_column('chk_fail_count', db.types.integer)
-            self.torrent.create_column('chk_success_last', db.types.datetime)
-            self.torrent.create_column('chk_success_count', db.types.integer)
-            self.torrent.create_column('infohash', db.types.text)
-            #self.torrent.create_column('', db.types.)
+            self.torrent.create_column('file_name', self.db.types.text)
+            self.torrent.create_column('seed_count', self.db.types.integer)
+            self.torrent.create_column('leetch_count', self.db.types.integer)
+            self.torrent.create_column('chk_fail_last', self.db.types.datetime)
+            self.torrent.create_column('chk_fail_count', self.db.types.integer)
+            self.torrent.create_column('chk_success_last', self.db.types.datetime)
+            self.torrent.create_column('chk_success_count', self.db.types.integer)
+            self.torrent.create_column('infohash', self.db.types.text)
+            #self.torrent.create_column('', self.db.types.)
             # self.torrent.create_index(["file_name"])
 
         if self.log.find_one() == None:
             print("[+] init.db.log")
-            self.log.create_column('name', db.types.text)
-            self.log.create_column('status', db.types.text)
-            self.log.create_column('datetime', db.types.datetime)
+            self.log.create_column('name', self.db.types.text)
+            self.log.create_column('status', self.db.types.text)
+            self.log.create_column('datetime', self.db.types.datetime)
 
 
     def count_and_print(self, table):
