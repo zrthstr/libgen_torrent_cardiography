@@ -1,57 +1,38 @@
-
-# find first missing torrent
-# fetch & save file in dir
-# read data & store:
-#   tracker info
-#   torrent info
-#
 #   todo:
-#   * add uniqe and primary key for torrents and tracker
+#   * add uniqe/primary key for torrents and tracker
 
-import toml
-import dataset
-import requests
-import libtorrent as lt
-from pathlib import Path
-from datetime import datetime
+from database import Database
 
-from db import Db
-from tor import Tor
-from tracker import Tracker
+from utils import load_config
+#from tor import Tor
+from torrent import Torrent
+from torrent_collection import Torrent_collection
+from tracker import Tracker, Tracker_collection
 
 CONFIG = "config/mgmt.toml"
 
-#TORRENT_DIR = Path("data/torrent")
-#TORRENT_SRC = "https://libgen.is/repository_torrent/"
+# move tp config
+HTTP_GET_RETRY = 1  ## move to config
 
-db = dataset.connect('sqlite:///data/ltc.sqlite')
+config = load_config(CONFIG)
 
-HTTP_GET_RETRY = 1
-
-global tracker
-
-
-tracker = db['tracker']
-torrent = db['torrent']
-log = db['log']
+db = Database()
+#db.integrety_chk()
+#db.info()
 
 
-def load_config():
-    return toml.load(CONFIG)
+torrent_collection = Torrent_collection(db, config)
 
-sqll = Db(db)
-#sqll.integrety_chk()
-#sqll.info()
+torrent_collection.info()
+torrent_collection._load_all_from_db()
+torrent_collection.info()
 
-config = load_config()
-#print(config)
+#print("newest")
+#torrent_collection.newest()
+torrent_collection.populate(count=1)
+#torrent_collection.info()
 
-#Tor.integrety_check_libgen()
-#Tor.populate(db, config, count=160, only_count_absent=True)
-
-Tor.peer_crawl(db, config, count=2)
-
-
+torrent_collection.peer_crawl()
 #ttt = Tor(10, db, config)
 #print(ttt)
 #ttt.info()
