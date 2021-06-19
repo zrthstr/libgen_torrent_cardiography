@@ -114,7 +114,7 @@ class Torrent_collection:
                 maximas[infohash] = r
 
 
-    def parse_response_dict(self, part, timeouts, maximas):
+    def parse_response_dict(self, part, timeouts, maximas, successful_trackers):
         if not self.ensure_present('tracker', part):
             # TODO
             # if tracker and result -> mark tarcker as success
@@ -139,6 +139,8 @@ class Torrent_collection:
                     exit()
 
             else:
+                # at this point we can assume a trackers response successfull
+                successful_trackers.add(part['tracker'])
                 self.parse_response_result(part['results'], maximas, timeouts)
 
         else:
@@ -179,26 +181,31 @@ class Torrent_collection:
         #print("Results: ", response)
         timeouts = []
         maximas = dict()
+        successful_trackers = set()
 
         for part in response:
             if isinstance(part, dict):
-                self.parse_response_dict(part, timeouts, maximas)
+                self.parse_response_dict(part, timeouts, maximas, successful_trackers)
             elif isinstance(part, list):
                 self.parse_response_list(part, timeouts)
             else:
                 print(f"[Debug] part of response is neither dict nore list: {type(part)}")
 
-        return maximas, timeouts
+        return maximas, timeouts, successful_trackers
 
 
-    def save_result(self, max_results, timeouts):
+    def save_result(self, max_results, timeouts, successful_trackers):
 
         # TODO:
         #   * calculate what torrents failed at updating
         #       * we can do this by comparing the questions and the answers
         #       * update timestamp and fail count on fail
 
-        print(timeouts)
+        print("timeouts: ",timeouts)
+        print("successful_trackers: ",successful_trackers)
+
+        exit()
+
 
         # all trackers not in timeout but in udplist should be good..
         for trackername in timeouts:
@@ -232,16 +239,37 @@ class Torrent_collection:
             infohashes=info_hash_list,
             trackers=udp_tracker,
             )
-        results = scr.scrape()
-        maximas, timeouts= self.parse_tracker_response(results)
 
+        results = scr.scrape()
+        maximas, timeouts, successful_trackers = self.parse_tracker_response(results)
+        maximas_lst = self.unscramble( maximas)
+        successful_trackers = self.clean_tracker_url(successful_trackers, add_postfix=True)
+        self.save_result(maximas_lst, timeouts, successful_trackers)
+
+
+    def unscramble(self, maximas):
+        """ we get several list of dictinaries containig or results from the scraper
+            yet to comapre these efficnetly, we need to have a dict of dicts
+        """
         maximas_lst = []
         for k, v in maximas.items():
             v["infohash"] = k
             maximas_lst.append(v)
+        return maximas_lst
 
-        self.save_result(maximas_lst, timeouts)
 
+    def clean_tracker_url(self, trackers, add_postfix=False):
+        """ libtorrent seems to use "udp://" while the torrent files
+            use the notation "udp//:
+
+            all observed tracker have the postfix '/announce'
+            we get them wo/ the prefix from the scraper
+            set add_postfix to True to add
+        """
+        POSTFIX = "/announce"
+        if add_postfix:
+            trackers = [t + POSTFIX for t in trackers]
+        return [t.replace("udp//:", "udp://") for t in trackers]
 
     def peer_crawl(self, count=1):
         for n in range(0,count):
