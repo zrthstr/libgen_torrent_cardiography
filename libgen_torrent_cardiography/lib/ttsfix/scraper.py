@@ -179,7 +179,8 @@ class Scraper:
                 # TODO: Improve error messages
                 result[
                     "error"
-                ] = f"Could not get stats for infohash [{self.connection}]"
+                ] = f"Could not get stats from [{self.connection}]"
+                #] = f"Could not get stats for infohash [{self.connection}]"
                 results.append(result)
                 logger.error("Result error: %s", result)
                 continue

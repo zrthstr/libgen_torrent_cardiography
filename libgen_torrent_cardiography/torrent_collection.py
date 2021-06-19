@@ -1,13 +1,15 @@
 import requests
+from collections import defaultdict
 import libtorrent as lt
 from pathlib import Path
 from datetime import datetime
-from lib.ttsfix import scraper
+from parse import parse
 
 from tracker import Tracker, Tracker_collection
 from torrent import Torrent
 
 from lib.ttsfix import scraper
+#from lib.ttsfix import scraper
 
 
 HTTP_GET_RETRY = 1  # move to config
@@ -99,77 +101,249 @@ class Torrent_collection:
         return False
 
 
-    def peer_exchange_m(self, info_hash_list):
-        tracker_collection = Tracker_collection(self.db)
+    def ensure_present(self, key, dictionary):
+        if not "tracker" in dictionary.keys():
+            print(f"response dict has no key named {key}")
+            return False
+        return True
 
-        all_tracker = tracker_collection.all()
-        print("all tracker", all_tracker)
-        print("all infohash", info_hash_list)
 
-        scr = scraper.Scraper(
-            timeout=5,
-            infohashes=info_hash_list,
-            trackers=all_tracker,
-            )
-        results = scr.scrape()
+    def harvest_errors(self, part, timeouts):
+        print("NOT implemented yet" )
+        print(part)
+        print("NOT implemented yet" )
 
-        from collections import defaultdict
-        max_seed = defaultdict(int)
-        max_leetch = defaultdict(int)
+
+    def parse_response_result(self, results, maximas):
+        ## TODO, this is extreemly unperfomant code... 
+        ## we should put this in a dict..
+        print("results" * 100, results)
+        #exit()
+        for m in maxima:
+            if m["infohash"] == results["infohash"]:
+                pass
+            break
+        else:
+            maximas.append(results)
+
+
+
+        print()
+
+    def parse_response_dict(self, part, timeouts, maximas):
+        print("parsing dict", part)
+        if not self.ensure_present('tracker', part):
+            # TODO
+            # if tracker and result -> mark tarcker as success
+            exit()
+        if self.ensure_present('results', part):
+            self.parse_response_result(part['results'], maximas)
+            exit()
+            # maybe just return, not exit or parse the error dict?
+        if self.ensure_present('errors', part):
+            print("part: ", part)
+            self.harvest_errors(part, timeouts)
+        else:
+            print("also not impemented" * 100)
+            exit()
+        ## TODO: look for other things in this dicst?
+
+
+        # if has tracker and has results 
+        return
+
+    def parse_response_list(self, part, timeouts):
+        #print("list:",part)
+        for p in part:
+            if not isinstance(p, str):
+                raise(f"Type error in response: {p}. Expecting string got {type(p)}.")
+            if self.is_timeout(p):
+                timeouts.append(self.parse_timeout(p))
+            else:
+                raise("Unknown error in response: {p}. Expeting timeout")
+        return
+
+
+    def is_timeout(self, string):
+        return string.startswith("Socket timeout for")
+
+
+    def parse_timeout(self, timeout, proto="udp"):
+        mask = "Socket timeout for {}: timed out"
+        udp_mask = "udp://{}/announce"
+        return udp_mask.format(parse(mask, timeout)[0])
+
+
+    def parse_timeoutSSS(self, timeouts):
+        mask = "Socket timeout for {}: timed out"
+        udp_mask = "udp://{}/announce"
+        print("timeouts", timeouts)
+        return [ udp_mask.format(parse(mask, t)[0]) for t in timeouts]
+
+
+    def parse_tracker_response(self, response):
+        print("Results: ", response)
         timeouts = []
+        maximas = []
 
+        for part in response:
+            if isinstance(part, dict):
+                print("dict")
+                self.parse_response_dict(part, timeouts, maximas)
+            elif isinstance(part, list):
+                print("list")
+                self.parse_response_list(part, timeouts)
+            else:
+                print("other")
+
+        print("timeouts: ", timeouts)
+        exit()
+        return timeouts, ...
+
+
+    def parse_tracker_response_(self, results):
         # data is a bit messy
         # we can get a list with errors
         # or a dict with a dict of erros
         # or a dict with list of real_results, we only want this
 
+        #max_seed = defaultdict(int)
+        #max_leech = defaultdict(int)
+        timeouts = []
+
+        # TODO, change exit to rais
+        print("results:",results)
+        exit()
+        max_results = []
+
+        # TODO TODO TODO
         for r in results:
-            #print("ra" * 100)
-            #print(r)
-            #print("re" * 100)
+            this = dict()
+            seed_max = 0
+            leech_max = 0
+            infohash = ""
+
 
             if self.is_list_with_only_timeout(r):
-                timeouts.append(r)
+                timeouts.append(r[0])
                 continue
 
             elif isinstance(r, dict):
                 if isinstance(r["results"], dict):
                     if self.is_list_with_only_timeout(r["results"]):
                         continue
-                    print("whit thee fuck is this a dict")
+                    print("[Error] what the fuck is this a dict?")
                     exit()
                 if not isinstance(r["results"], list):
-                    print("[ERROR] this should not happen. r['results'] is not list not error dict")
+                    print("[Error] this should not happen. r['results'] is not list not error dict")
                     print("r['results']:::",r['results'])
                     exit()
 
+            if True:
                 for rr in r["results"]:
-                    #print("rr:",rr)
                     if isinstance(rr, str):
                         if self.is_str_timeout(rr):
                             print("Debug: got rid of timout")
                             timeouts.append(rr)
                             continue
+                    if not 'seeders' in rr.keys():
+                        print("[debug] no seeders found in result dict")
+                        continue
 
-                    max_seed[rr["infohash"]] = max( rr["seeders"], max_seed[rr["infohash"]])
-                    max_leetch[rr["infohash"]] = max( rr["seeders"], max_leetch[rr["infohash"]])
+                    print("rr:",rr)
+                    infohash = rr["infohash"]
+                    seed_max = max(rr["seeders"], seed_max)
+                    leech_max = max(rr["leechers"], leech_max)
 
-            else:
-                print("[Debug] unknown error type ", type(r), r)
-                exit()
+            # TODO: find out if this makes any sense at all... 
+            # should this be indented one level further?
+            #
+            if True:
+                if infohash:
+                    max_results.append(dict(infohash=infohash,
+                                        seed_count=seed_max,
+                                        leech_count=leech_max,
+                                        chk_success_last=datetime.utcnow()))
 
-        print(max_seed)
-        print(max_leetch)
+            #else:
+            #    print("[Debug] unknown error type ", type(r), r)
+            #    exit()
+
+        print(max_results, "x" * 100, timeouts)
+        return max_results, timeouts
+
+
+    def save_result(self, max_results, timeouts):
+        # we know that all torrents WO/ that have no results
+        # but were in tha batch are failures
+        # TODO, update timstamp and fail count
+        #
+        # we also know all tracker wo/ results are to be considered fails
+
+
+        timeouts = self.parse_timeout(timeouts)
         print(timeouts)
+        ## TODO save timouts
+
+        print("max_results: ",max_results)
+        #print("dddddd")
+
+        ### TODO; increment the update counter!
+        for res in max_results:
+            #print("tyype res", type(res))
+            #print(res, res["infohash"])
+            res["chk_success_count"] = self.db.torrent.find_one(infohash=res["infohash"])["chk_success_count"]
+            updated_many = self.db.torrent.update(res, ['infohash'], return_count=True )
+            print("Updateing", res)
+            # TODO check if update_many == 1, else error
+            print("updte many:", updated_many)
+
+
+        import time
+        time.sleep(10)
+        ## TODO: proile the update to see if switching to update_many is relevant
+        #updated_many = self.db.torrent.update_many(max_results, ['infohash'])
+
+        #print(f"[debug] {updated} rows updated")
         exit()
-        return results
+
+
+    def peer_exchange_m(self, info_hash_list):
+        tracker_collection = Tracker_collection(self.db)
+        all_tracker = tracker_collection.all()
+        udp_tracker = [ tracker for tracker in all_tracker if tracker.startswith("udp") ]
+
+        # keep this
+        #other_tracker = set(all_tracker) - set(udp_tracker)
+
+        print("all tracker", all_tracker)
+        print("all infohash", info_hash_list)
+        #exit()
+
+        scr = scraper.Scraper(
+            timeout=5,
+            infohashes=info_hash_list,
+            trackers=udp_tracker,
+            #trackers=other_tracker,
+            )
+        results = scr.scrape()
+        max_results, timeouts = self.parse_tracker_response(results)
+
+        #print("timeouts:", timeouts)
+        # push results to db..
+        ## {hashinfo:"foo", seed_count:99, leech_count:9}
+
+        self.save_result(max_results, timeouts)
+
+        exit()
+
 
     def peer_crawl(self, count=1, limit=60):
         print(f"this is a crawl party!!")
         for n in range(0,count):
 
             # TODO move limit to CONFIG
-            oldest_n = self.db.torrent.find(order_by='chk_success_last', _limit=limit)
+            oldest_n = self.db.torrent.find(order_by='-chk_success_last', _limit=limit)
 
             oldest_n_ih = [ t["infohash"] for t in oldest_n ]
             print(oldest_n_ih)

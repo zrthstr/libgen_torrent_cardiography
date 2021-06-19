@@ -31,7 +31,7 @@ class Database:
             print("[+] init.db.torrent")
             self.torrent.create_column('file_name', self.db.types.text)
             self.torrent.create_column('seed_count', self.db.types.integer)
-            self.torrent.create_column('leetch_count', self.db.types.integer)
+            self.torrent.create_column('leech_count', self.db.types.integer)
             self.torrent.create_column('chk_fail_last', self.db.types.datetime)
             self.torrent.create_column('chk_fail_count', self.db.types.integer)
             self.torrent.create_column('chk_success_last', self.db.types.datetime)

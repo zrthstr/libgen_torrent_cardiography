@@ -29,7 +29,7 @@ torrent_collection.info()
 
 #print("newest")
 #torrent_collection.newest()
-torrent_collection.populate(count=1)
+torrent_collection.populate(count=10)
 #torrent_collection.info()
 
 torrent_collection.peer_crawl()
