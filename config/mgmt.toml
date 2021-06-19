@@ -13,3 +13,4 @@
 
 [peersearch]
 	udp_batchsize = 60
+	scraper_loglevel = "WARNING"

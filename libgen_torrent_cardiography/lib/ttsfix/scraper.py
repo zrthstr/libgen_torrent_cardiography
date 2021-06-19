@@ -16,7 +16,8 @@ import requests
 # TODO: Improve logger format to include process id
 logging.basicConfig()
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+#logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 # Protocol says to keep it that way (https://www.bittorrent.org/beps/bep_0015.html)
 PROTOCOL_ID = 0x41727101980
@@ -83,7 +84,10 @@ class Connection:
 
 class Scraper:
     def __init__(
-        self, trackers: List = [], infohashes: Tuple[List, str] = [], timeout: int = 10
+        self, trackers: List = [],
+        infohashes: Tuple[List, str] = [],
+        timeout: int = 10,
+        loglevel: str = "DEBUG"
     ):
         """
         Launches a scraper bound to a particular tracker
@@ -95,6 +99,7 @@ class Scraper:
         self.trackers = trackers
         self.infohashes = infohashes
         self.timeout = timeout
+        logger.setLevel(loglevel)
 
         self.good_infohashes = self.get_good_infohashes()
 
@@ -261,7 +266,8 @@ class Scraper:
         :return: [(infohash, seeders, leechers, completed),...]
         """
 
-        print(self.get_good_infohashes())
+        #self.get_good_infohashes()
+        #print(self.get_good_infohashes())
         self.trackers = self.get_trackers()
 
         if not self.good_infohashes:

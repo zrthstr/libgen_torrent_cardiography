@@ -25,9 +25,10 @@ class Torrent_collection:
         self.base_url = self.TORRENT_SRC
         self.members = self._load_all_from_db()
 
-        print("config", config)
+        #print("config", config)
 
     def info(self):
+        print("Info: ")
         for tor in self.members:
             print(tor)
 
@@ -70,22 +71,34 @@ class Torrent_collection:
 
     def ensure_present(self, key, dictionary):
         if not "tracker" in dictionary.keys():
-            print(f"response dict has no key named {key}")
+            print(f"[Debug] response dict has no key named {key}")
             return False
         return True
 
 
     def harvest_errors(self, part, timeouts):
-        ### TODO
-        print("NOT implemented yet" )
-        print(part)
-        print("NOT implemented yet" )
+        if isinstance(part, dict):
+            error = part['error']
+            print("error: ", error)
+            print(f"{type(error)}")
+            ## TODO, finish if needed
+
+        else:
+            # TODO: dont exit
+            print(f"[Debug] unexpected type {type(part)} {part}")
+            exit()
 
 
     def parse_response_result(self, results, maximas, timeouts):
         for r in results:
             if 'error' in r.keys():
-                self.harvest_errors(r, timeouts)
+                ### For now lets not care about this.
+                ### It apearst these results are delivered back twice from the peer scraper lib
+                ### so we can disregard this occurence
+
+                #print("1" * 100, "ss")
+                #print(r["infohash"], r["error"])
+                #self.harvest_errors(r, timeouts)
                 continue
 
             infohash = r["infohash"]
@@ -106,16 +119,25 @@ class Torrent_collection:
             # TODO
             # if tracker and result -> mark tarcker as success
             # dont exit but log error and continue
+            print("[DEBUG] bad bad bad")
             exit()
 
         if self.ensure_present('results', part):
             if isinstance( part['results'], str):
                 # TODO: dont exit, just log..
+                print("[Debug] part['results'], part[results]")
                 self.harvest_errors(part, timeouts)
                 exit()
 
             if isinstance( part['results'][0], str):
-                self.harvest_errors(part['results'], timeouts)
+                if self.is_timeout(part['results'][0]):
+                    #timeouts.extend(self.parse_timeout(part['results'][0]))
+                    timeouts.append(self.parse_timeout(part['results'][0]))
+                else:
+                    # Todo: dont exit..
+                    print("[Debug] unknown error")
+                    exit()
+
             else:
                 self.parse_response_result(part['results'], maximas, timeouts)
 
@@ -134,6 +156,7 @@ class Torrent_collection:
                 exit()
             if self.is_timeout(p):
                 timeouts.append(self.parse_timeout(p))
+                #timeouts.extend(self.parse_timeout(p))
             else:
                 # TODO: dont exit
                 print("Unknown error in response: {p}. Expeting timeout")
@@ -148,24 +171,22 @@ class Torrent_collection:
     def parse_timeout(self, timeout, proto="udp"):
         mask = "Socket timeout for {}: timed out"
         udp_mask = "udp://{}/announce"
-        print("DEBUG PARSING: ", timeout)
+        #print("DEBUG PARSING: ", timeout)
         return udp_mask.format(parse(mask, timeout)[0])
 
 
     def parse_tracker_response(self, response):
-        print("Results: ", response)
+        #print("Results: ", response)
         timeouts = []
         maximas = dict()
 
         for part in response:
             if isinstance(part, dict):
-                print("dict")
                 self.parse_response_dict(part, timeouts, maximas)
             elif isinstance(part, list):
-                print("list")
                 self.parse_response_list(part, timeouts)
             else:
-                print("other")
+                print(f"[Debug] part of response is neither dict nore list: {type(part)}")
 
         return maximas, timeouts
 
@@ -177,7 +198,7 @@ class Torrent_collection:
         #       we can do this by comparing the questions and the answers
         #   * update timestamp and fail count
 
-        #print(timeouts)
+        print(timeouts)
         #timeouts = [self.parse_timeout(t) for t in timeouts]
 
         for res in max_results:
@@ -197,14 +218,17 @@ class Torrent_collection:
 
         #TODO: do we also want to use not UDP tackers?
         # other_tracker = set(all_tracker) - set(udp_tracker)
+        loglevel = self.config["peersearch"]["scraper_loglevel"]
+
 
         scr = scraper.Scraper(
+            loglevel=loglevel,
             timeout=5,
             infohashes=info_hash_list,
             trackers=udp_tracker,
             )
         results = scr.scrape()
-        maximas, timeouts = self.parse_tracker_response(results)
+        maximas, timeouts= self.parse_tracker_response(results)
 
         maximas_lst = []
         for k, v in maximas.items():
