@@ -3,6 +3,8 @@
 
 from database import Database
 
+import random
+
 from utils import load_config
 #from tor import Tor
 from torrent import Torrent
@@ -29,12 +31,12 @@ torrent_collection.info()
 
 #print("newest")
 #torrent_collection.newest()
-torrent_collection.populate(count=10)
+torrent_collection.populate(count=20)
 #torrent_collection.info()
 
 torrent_collection.peer_crawl()
-#ttt = Tor(10, db, config)
+ttt = Torrent(random.randint(0,50), db, config)
 #print(ttt)
-#ttt.info()
+ttt.info()
 
 

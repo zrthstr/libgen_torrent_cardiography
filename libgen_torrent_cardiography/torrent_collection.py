@@ -131,7 +131,7 @@ class Torrent_collection:
 
             if infohash in maximas.keys():
                 maximas[infohash]['seeders'] = max(seeders, maximas[infohash]['seeders'])
-                maximas[infohash]['leechers'] = max(seeders, maximas[infohash]['leechers'])
+                maximas[infohash]['leechers'] = max(leechers, maximas[infohash]['leechers'])
 
             else:
                 r.pop("infohash")
@@ -237,18 +237,22 @@ class Torrent_collection:
         # we also know all tracker wo/ results are to be considered fails
 
 
-        timeouts = self.parse_timeout(timeouts)
-        print(timeouts)
+        #print(timeouts)
         ## TODO save timouts
+        #timeouts = [self.parse_timeout(t) for t in timeouts]
 
         print("max_results: ",max_results)
         #print("dddddd")
 
         ### TODO; increment the update counter!
+
         for res in max_results:
             #print("tyype res", type(res))
             #print(res, res["infohash"])
-            res["chk_success_count"] = self.db.torrent.find_one(infohash=res["infohash"])["chk_success_count"]
+
+            res["chk_success_last"] = datetime.utcnow()
+
+            #res["chk_success_count"] = self.db.torrent.find_one(infohash=res["infohash"])["chk_success_count"]
             updated_many = self.db.torrent.update(res, ['infohash'], return_count=True )
             print("Updateing", res)
             # TODO check if update_many == 1, else error
@@ -284,7 +288,7 @@ class Torrent_collection:
 
         print("timeouts:", timeouts)
         # push results to db..
-        ## {hashinfo:"foo", seed_count:99, leech_count:9}
+        ## {hashinfo:"foo", seeders:99, leech_count:9}
 
         #print("len maximas",len(maximas))
         maximas_lst = []
@@ -297,7 +301,7 @@ class Torrent_collection:
 
         self.save_result(maximas_lst, timeouts)
 
-        exit()
+        #exit()
 
 
     def peer_crawl(self, count=1, limit=60):
@@ -305,7 +309,7 @@ class Torrent_collection:
         for n in range(0,count):
 
             # TODO move limit to CONFIG
-            oldest_n = self.db.torrent.find(order_by='-chk_success_last', _limit=limit)
+            oldest_n = self.db.torrent.find(order_by='chk_success_last', _limit=limit)
 
             oldest_n_ih = [ t["infohash"] for t in oldest_n ]
             print(oldest_n_ih)

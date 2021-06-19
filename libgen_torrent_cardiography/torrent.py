@@ -36,8 +36,8 @@ class Torrent:
             tor = self.db.torrent.find_one(file_name=self.file_name)
 
         self.infohash = tor["infohash"]
-        self.seed_count = tor["seed_count"]
-        self.leech_count = tor["leech_count"]
+        self.seeders = tor["seeders"]
+        self.leechers = tor["leechers"]
         self.chk_fail_last = tor["chk_fail_last"]
         self.chk_fail_count = tor["chk_fail_count"]
         self.chk_success_last = tor["chk_success_last"]
@@ -47,8 +47,8 @@ class Torrent:
     def info(self):
         print(f"Info on torrent: {self.file_name}")
         print(f"    infohash:                {self.infohash}")
-        print(f"    seed_count:              {self.seed_count}")
-        print(f"    leech_count:             {self.leech_count}")
+        print(f"    seeders:                 {self.seeders}")
+        print(f"    leechers:                {self.leechers}")
         print(f"    id:                      {self.id}")
         print(f"    full_path:               {self.full_path}")
         print(f"    url:                     {self.url}")
