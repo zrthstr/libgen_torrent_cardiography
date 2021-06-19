@@ -159,7 +159,7 @@ class Torrent_collection:
                 #timeouts.extend(self.parse_timeout(p))
             else:
                 # TODO: dont exit
-                print("Unknown error in response: {p}. Expeting timeout")
+                print(f"Unknown error in response: {p}. Expeting timeout")
                 exit()
         return
 
@@ -195,11 +195,16 @@ class Torrent_collection:
 
         # TODO:
         #   * calculate what torrents failed at updating
-        #       we can do this by comparing the questions and the answers
-        #   * update timestamp and fail count
+        #       * we can do this by comparing the questions and the answers
+        #       * update timestamp and fail count on fail
 
         print(timeouts)
-        #timeouts = [self.parse_timeout(t) for t in timeouts]
+
+        # all trackers not in timeout but in udplist should be good..
+        for trackername in timeouts:
+            tracker = Tracker(self.db, trackername)
+            tracker.increment_fail_count()
+
 
         for res in max_results:
             res["chk_success_last"] = datetime.utcnow()
@@ -218,8 +223,8 @@ class Torrent_collection:
 
         #TODO: do we also want to use not UDP tackers?
         # other_tracker = set(all_tracker) - set(udp_tracker)
+        #
         loglevel = self.config["peersearch"]["scraper_loglevel"]
-
 
         scr = scraper.Scraper(
             loglevel=loglevel,

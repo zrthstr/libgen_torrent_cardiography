@@ -43,6 +43,8 @@ class Torrent:
         self.chk_success_last = tor["chk_success_last"]
         self.chk_success_count = tor["chk_success_count"]
 
+        ## TODO: do we need to save this now?
+
 
     def info(self):
         print(f"Info on torrent: {self.file_name}")
@@ -108,21 +110,26 @@ class Torrent:
     def process_tracker(self, ti):
         #print("[i] adding trackers if new ones found")
         tracker_in_torrent = set(self.get_tracker(ti))
-        tracker_in_db = set([t["name"] for t in self.db.tracker.find()])
+        tracker_in_db = set([t["url"] for t in self.db.tracker.find()])
         tracker_new = tracker_in_torrent - tracker_in_db
 
         if len(tracker_new) == 0:
             return
 
         print(f"[+] Adding {len(tracker_new)} new tracker")
-        for name in tracker_new:
+        for url in tracker_new:
             #print(f"[debug] insertring: {name}")
-            self.db.tracker.insert(dict(name=name,
+            """
+            self.db.tracker.insert(dict(url=url,
                                 chk_success_count=0,
                                 chk_success_last=None,
                                 chk_fail_count=0,
                                 chk_fail_last=None,
                                 ))
+            """
+            #print("URL", url)
+            tracker = Tracker(self.db, url)
+
         self.db.log.insert(dict(name=self.file_name,
             status=f"added trackers: {len(tracker_new)}",
                         datetime=datetime.utcnow()))

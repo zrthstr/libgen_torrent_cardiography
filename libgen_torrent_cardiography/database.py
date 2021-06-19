@@ -19,7 +19,7 @@ class Database:
     def chk_schema(self):
         if self.tracker.find_one() == None:
             print("[+] init.db.tracker")
-            self.tracker.create_column('name', self.db.types.text)
+            self.tracker.create_column('url', self.db.types.text)
             self.tracker.create_column('chk_success_count', self.db.types.integer)
             self.tracker.create_column('chk_fail_count', self.db.types.integer)
             self.tracker.create_column('chk_fail_last', self.db.types.datetime)
