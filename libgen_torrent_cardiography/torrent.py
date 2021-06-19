@@ -30,7 +30,7 @@ class Torrent:
 
         tor = self.db.torrent.find_one(file_name=self.file_name)
         if not tor:
-            print(f"[debug] obj does NOT exits in db")
+            #print(f"[debug] obj does NOT exits in db")
             self.get_from_file()
             self.save_to_db()
             tor = self.db.torrent.find_one(file_name=self.file_name)
@@ -89,7 +89,7 @@ class Torrent:
 
     def get_from_file(self):
         if self.full_path.is_file():
-            print(f"[debug] found f{self.full_path} in dir")
+            #print(f"[debug] found f{self.full_path} in dir")
             return 'found'
 
         for e in range(HTTP_GET_RETRY+1):
@@ -131,6 +131,7 @@ class Torrent:
     def get_tracker(self, ti):
         return [t.url for t in ti.trackers()]
 
+    """
     def load(self):
         ### load if exists, else creat new?!
         #tor = torrent.findone(id=["self.id"])
@@ -140,6 +141,7 @@ class Torrent:
             pass # TODO
         else:
             print("ihihiihihihi", tor["infohash"])
+    """
 
 
     def save_to_db(self):
@@ -166,6 +168,7 @@ class Torrent:
                         datetime=datetime.utcnow()))
 
 
+    """
     def peer_exchange(self):
         ### apparently we can pass multiple infohashes in one go... 
         ### Up to about 74 torrents can be scraped at once. A full scrape can't be done with this protocol.
@@ -182,4 +185,4 @@ class Torrent:
         results = scr.scrape()
         print(results)
         return results
-
+    """

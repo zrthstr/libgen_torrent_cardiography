@@ -25,13 +25,13 @@ db = Database()
 
 torrent_collection = Torrent_collection(db, config)
 
-torrent_collection.info()
+#torrent_collection.info()
 torrent_collection._load_all_from_db()
-torrent_collection.info()
+#torrent_collection.info()
 
 #print("newest")
 #torrent_collection.newest()
-torrent_collection.populate(count=20)
+torrent_collection.populate(count=2)
 #torrent_collection.info()
 
 torrent_collection.peer_crawl()

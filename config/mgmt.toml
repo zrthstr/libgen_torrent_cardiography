@@ -11,3 +11,5 @@
 	#srv = http://libgen.rs/ficton/repository_torrent/
 	#dir = "data/torrent/fiction"
 
+[peersearch]
+	udp_batchsize = 60
