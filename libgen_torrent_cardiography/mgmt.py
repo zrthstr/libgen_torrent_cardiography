@@ -31,12 +31,21 @@ torrent_collection._load_all_from_db()
 
 #print("newest")
 #torrent_collection.newest()
-torrent_collection.populate(count=2)
+
+#torrent_collection.populate(count=10)
 #torrent_collection.info()
 
-torrent_collection.peer_crawl()
+#torrent_collection.peer_crawl(1)
+
 ttt = Torrent(random.randint(0,50), db, config)
 #print(ttt)
 ttt.info()
 
 
+
+for loop in range(100):
+
+    torrent_collection.populate(count=10)
+    torrent_collection.peer_crawl(1)
+    ttt = Torrent(random.randint(0,50), db, config)
+    ttt.info()

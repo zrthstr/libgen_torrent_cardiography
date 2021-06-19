@@ -26,7 +26,11 @@ class Tracker:
     def increment_fail_count(self):
         self.chk_fail_count += 1
         self.chk_fail_last = datetime.utcnow()
+        self._save_to_db()
 
+    def increment_success_count(self):
+        self.chk_success_count += 1
+        self.chk_success_last = datetime.utcnow()
         self._save_to_db()
 
 

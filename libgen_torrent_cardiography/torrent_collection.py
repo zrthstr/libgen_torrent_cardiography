@@ -160,9 +160,10 @@ class Torrent_collection:
                 timeouts.append(self.parse_timeout(p))
                 #timeouts.extend(self.parse_timeout(p))
             else:
-                # TODO: dont exit
+                """
+                Unknown error in response: Connection refused for tracker.coppersurfer.tk:6969: [Errno 111] Connection refused. Expeting timeout"""
                 print(f"Unknown error in response: {p}. Expeting timeout")
-                exit()
+
         return
 
 
@@ -204,23 +205,31 @@ class Torrent_collection:
         print("timeouts: ",timeouts)
         print("successful_trackers: ",successful_trackers)
 
-        exit()
+        successful_and_timeout = set(successful_trackers) & set(timeouts)
+        if successful_and_timeout:
+            print("successful_and_timeout: ", successful_and_timeout)
+            print("[Debug] so much confusion. But could be okey")
+            exit()
 
 
-        # all trackers not in timeout but in udplist should be good..
+        for trackername in successful_trackers:
+            tracker = Tracker(self.db, trackername)
+            tracker.increment_success_count()
+
         for trackername in timeouts:
             tracker = Tracker(self.db, trackername)
             tracker.increment_fail_count()
 
 
+        # TODO: profile the update function to see if switching to update_many is relevant
+        #       updated_many = self.db.torrent.update_many(max_results, ['infohash'])
+
+        # TODO: make this oo! see tracker..
         for res in max_results:
             res["chk_success_last"] = datetime.utcnow()
             res["chk_success_count"] = 1 + self.db.torrent.find_one(infohash=res["infohash"])["chk_success_count"]
             self.db.torrent.update(res, ['infohash'], return_count=True, ensure=False )
-            #print("Updating", res)
 
-        # TODO: profile the update function to see if switching to update_many is relevant
-        #       updated_many = self.db.torrent.update_many(max_results, ['infohash'])
 
 
     def peer_exchange_m(self, info_hash_list):
