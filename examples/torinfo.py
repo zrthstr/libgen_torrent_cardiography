@@ -46,6 +46,10 @@ torinfo = h.get_torrent_info()
 #print(torinfo.nodes())
 #print(torinfo.web_seeds())
 
+
+#total_size
+
+
 #print(torinfo.name())
 #print(torinfo.creation_date())
 #print(torinfo.info_hash())

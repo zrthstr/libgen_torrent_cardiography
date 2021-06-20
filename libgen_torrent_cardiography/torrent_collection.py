@@ -79,8 +79,9 @@ class Torrent_collection:
     def harvest_errors(self, part, timeouts):
         if isinstance(part, dict):
             error = part['error']
-            print("error: ", error)
+            print("error jdij: ", error)
             print(f"{type(error)}")
+            exit()
             ## TODO, finish if needed
 
         else:
@@ -104,10 +105,12 @@ class Torrent_collection:
             infohash = r["infohash"]
             seeders = r["seeders"]
             leechers = r["leechers"]
+            completed = r["completed"]
 
             if infohash in maximas.keys():
                 maximas[infohash]['seeders'] = max(seeders, maximas[infohash]['seeders'])
                 maximas[infohash]['leechers'] = max(leechers, maximas[infohash]['leechers'])
+                maximas[infohash]['completed'] = max(completed, maximas[infohash]['completed'])
 
             else:
                 r.pop("infohash")

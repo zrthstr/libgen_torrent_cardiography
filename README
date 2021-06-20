@@ -3,6 +3,7 @@ monitor libgen (sci-hub) health.
 e.g. number of seeders per torrent
 
 ## about libgen data and torrents
+SEE http://libgen.lc/stat.php
 * libgen consists of a few different catalogues of files
 there appear to be:
   standards, comics, fiction, magazines, scimag, fiction_rus

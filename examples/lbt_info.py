@@ -14,6 +14,12 @@ print(ti)
 print(dir(ti))
 
 
+#print(ti.total_size())
+
+print(ti.creation_date())
+exit()
+
+
 for attr, value in vars(ti).items():
     print("sss")
     print(attr, value)

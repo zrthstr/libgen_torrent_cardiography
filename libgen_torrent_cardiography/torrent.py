@@ -38,6 +38,9 @@ class Torrent:
         self.infohash = tor["infohash"]
         self.seeders = tor["seeders"]
         self.leechers = tor["leechers"]
+        self.completed = tor["completed"]
+        self.creation_date = tor["creation_date"]
+        self.size_bytes = tor["size_bytes"]
         self.chk_fail_last = tor["chk_fail_last"]
         self.chk_fail_count = tor["chk_fail_count"]
         self.chk_success_last = tor["chk_success_last"]
@@ -51,9 +54,12 @@ class Torrent:
         print(f"    infohash:                {self.infohash}")
         print(f"    seeders:                 {self.seeders}")
         print(f"    leechers:                {self.leechers}")
+        print(f"    completed:               {self.completed}")
         print(f"    id:                      {self.id}")
+        print(f"    creation_date:           {self.creation_date}")
         print(f"    full_path:               {self.full_path}")
         print(f"    url:                     {self.url}")
+        print(f"    size_bytes:              {self.size_bytes}")
         print(f"    chk_fail_last:           {self.chk_fail_last}")
         print(f"    chk_fail_count:          {self.chk_fail_count}")
         print(f"    chk_success_last:        {self.chk_success_last}")
@@ -138,33 +144,26 @@ class Torrent:
     def get_tracker(self, ti):
         return [t.url for t in ti.trackers()]
 
-    """
-    def load(self):
-        ### load if exists, else creat new?!
-        #tor = torrent.findone(id=["self.id"])
-        tor = self.db.torrent.findone(id=["self.filename"])
-        if tor == None: ## ugly!
-            # create new
-            pass # TODO
-        else:
-            print("ihihiihihihi", tor["infohash"])
-    """
-
 
     def save_to_db(self):
         print(f'[+] Saving new torrent to DB from file {self.full_path} ')
         ti = lt.torrent_info(str(self.full_path))
-
+        creation_date = ti.creation_date()
         self.process_tracker(ti)
-
         infohash = str(ti.info_hashes().get_best())
+        size_bytes = ti.total_size()
         self.db.torrent.insert(dict(file_name=self.file_name,
                             id=self.id,
                             infohash = infohash,
+                            size_bytes = size_bytes,
+                            creation_date = creation_date,
                             chk_fail_count = 0,
                             chk_fail_last = None,
                             chk_success_count = 0,
                             chk_success_last = None,
+                            completed = None,
+                            #leecher = None, # TODO hmmm why do we not need this?
+                            #seeder = None,
                             ))
 
         #new_tracker = [e.url for e in ti.trackers()]
@@ -174,22 +173,3 @@ class Torrent:
                         status=f"added torrent {self.id}",
                         datetime=datetime.utcnow()))
 
-
-    """
-    def peer_exchange(self):
-        ### apparently we can pass multiple infohashes in one go... 
-        ### Up to about 74 torrents can be scraped at once. A full scrape can't be done with this protocol.
-
-        all_tracker = Tracker.all(self.db)
-        print(f"all tracker: {all_tracker}")
-
-        scr = scraper.Scraper(
-            timeout=2,
-            infohashes=[self.infohash,],
-            trackers=all_tracker,
-            #trackers=["udp//:tracker.opentrackr.org:1337"],
-            )
-        results = scr.scrape()
-        print(results)
-        return results
-    """
