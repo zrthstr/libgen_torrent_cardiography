@@ -17,7 +17,7 @@ mgmt:
 	poetry run python libgen_torrent_cardiography/mgmt.py
 
 rm_mgmt_db:
-	rm data/ltc.sqlite
+	rm data/ltc.sqlite || true
 
 restart: rm_mgmt_db mgmt
 

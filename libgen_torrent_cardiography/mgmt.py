@@ -6,7 +6,6 @@ from database import Database
 import random
 
 from utils import load_config
-#from tor import Tor
 from torrent import Torrent
 from torrent_collection import Torrent_collection
 from tracker import Tracker, Tracker_collection
@@ -42,9 +41,7 @@ ttt = Torrent(random.randint(0,50), db, config)
 ttt.info()
 
 
-
 for loop in range(100):
-
     torrent_collection.populate(count=10)
     torrent_collection.peer_crawl(1)
     ttt = Torrent(random.randint(0,50), db, config)

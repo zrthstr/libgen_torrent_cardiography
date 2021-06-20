@@ -6,7 +6,12 @@ class Database:
     def __init__(self):
         self.db = self.connect()
         self.tracker = self.db['tracker']
-        self.torrent = self.db['torrent']
+        self.torrent = self.db.create_table(
+                            'torrent',
+                            primary_id='infohash',
+                            primary_type=self.db.types.string(40),
+                            )
+        #self.torrent = self.db['torrent']
         self.log = self.db['log']
 
         self.chk_schema()
@@ -39,9 +44,9 @@ class Database:
             self.torrent.create_column('chk_fail_count', self.db.types.integer)
             self.torrent.create_column('chk_success_last', self.db.types.datetime)
             self.torrent.create_column('chk_success_count', self.db.types.integer)
-            self.torrent.create_column('infohash', self.db.types.text)
+            #self.torrent.create_column('infohash', self.db.types.text)
             #self.torrent.create_column('', self.db.types.)
-            # self.torrent.create_index(["file_name"])
+            #self.torrent.create_index(["file_name"])
 
         if self.log.find_one() == None:
             print("[+] init.db.log")
@@ -67,6 +72,7 @@ class Database:
         ###     e.g. make sure that if we notice 0,1,2 and 4 but not 3
         ### * ID and file_name fitt
         ### * no infohash are double
+        ###   this should be enforced on db level via primary key
         pass
 
 
