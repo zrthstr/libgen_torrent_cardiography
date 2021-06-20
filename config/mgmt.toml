@@ -1,7 +1,7 @@
 
 [catalogue]
 
-	[catalogue.r]
+	[catalogue.books]
 	known_missing  = [81000, 82000]
 	#src = http://libgen.rs/repository_torrent/
 	#dir = "data/torrent/r"
@@ -10,6 +10,12 @@
 	known_missing  = []
 	#srv = http://libgen.rs/ficton/repository_torrent/
 	#dir = "data/torrent/fiction"
+
+
+	[catalogue.scimag]
+	known_missing  = []
+	#srv = https://
+	#dir = "data/torrent/scimag"
 
 [peersearch]
 	udp_batchsize = 60

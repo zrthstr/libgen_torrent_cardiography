@@ -12,10 +12,32 @@ from lib.ttsfix import scraper
 HTTP_GET_RETRY = 1  # move to config
 
 class Torrent:
-    TORRENT_DIR = Path("data/torrent") # get from config!
-    TORRENT_SRC = "https://libgen.is/repository_torrent/"
+    #TORRENT_DIR = Path("data/torrent") # get from config!
+    #TORRENT_SRC = "https://libgen.is/repository_torrent/"
 
-    def __init__(self, id, db, config):
+
+
+    ### TODO: Move to config
+    TORRENT_DIR = dict(
+            books = Path("data/torrent/books"), # get from config!
+            scimag = Path("data/torrent/scimag"), # get from config!
+            fiction = Path("data/torrent/fiction"), # get from config!
+            )
+
+    TORRENT_SRC = dict(
+        books ="https://libgen.is/repository_torrent/",
+        scimag = "http://gen.lib.rus.ec/scimag/repository_torrent/",
+        fiction = "http://gen.lib.rus.ec/fiction/repository_torrent/" )
+
+    TORRENT_MASK = dict(
+            books="r_{}.torrent",
+            ficton="f_{}.torrent",
+            scimag="sm_{}-{}.torrent")
+
+
+
+
+    def __init__(self, id, collection, db, config):
         self.db = db
         #self.tracker_db = db.tracker
         #self.torrent_db = db.torrent
@@ -23,10 +45,12 @@ class Torrent:
 
         self.config = config
         self.id = id
+        self.collection = collection
+        #assert collection in ["books", "scimag", "fictoin"]
 
         self.file_name = self.generate_libgen_torrent_filename()
-        self.full_path = self.TORRENT_DIR / self.file_name
-        self.url = self.TORRENT_SRC + self.file_name
+        self.full_path = self.TORRENT_DIR[collection] / self.file_name
+        self.url = self.TORRENT_SRC[collection] + self.file_name
 
         tor = self.db.torrent.find_one(file_name=self.file_name)
         if not tor:
@@ -36,6 +60,7 @@ class Torrent:
             tor = self.db.torrent.find_one(file_name=self.file_name)
 
         self.infohash = tor["infohash"]
+        #self.collection = self.collection
         self.seeders = tor["seeders"]
         self.leechers = tor["leechers"]
         self.completed = tor["completed"]
@@ -52,6 +77,7 @@ class Torrent:
     def info(self):
         print(f"Info on torrent: {self.file_name}")
         print(f"    infohash:                {self.infohash}")
+        print(f"    collection:              {self.collection}")
         print(f"    seeders:                 {self.seeders}")
         print(f"    leechers:                {self.leechers}")
         print(f"    completed:               {self.completed}")
@@ -66,10 +92,30 @@ class Torrent:
         print(f"    chk_success_count:       {self.chk_success_count}")
 
 
-    ##  TODO decide where this should luve
     def generate_libgen_torrent_filename(self):
+        ## TODO get this mask from config
+        ##      use format() i guess..
+
         name = (self.id ) * 1000
-        return f"r_{name:03}.torrent"
+        if self.collection == "books":
+            return f"r_{name:03}.torrent"
+
+        elif self.collection == "fiction":
+            ### handle this small inconsistency
+            if name:
+                return f"f_{name:03}.torrent"
+            return "f_0.torrent"
+
+        elif self.collection == "scimag":
+            name = name * 100
+            name_to = name + 99999
+            #print(name, name_to)
+            #exit()
+            return f"sm_{name:08}-{name_to:08}.torrent"
+        else:
+            print("[Debug] unknown collection")
+            exit()
+
 
     def get_http(self):
         # returns: Request obj, Retry, Success
@@ -79,7 +125,7 @@ class Torrent:
                 return r, False, True
             if r.status_code == 404:
                 print(f"Possible missing torrent detected: {self.id}")
-                log.insert(dict(name=self.file_name,
+                self.db.log.insert(dict(name=self.file_name,
                                 status=f"Possible missing torrent detected: {self.id}",
                                 datetime=datetime.utcnow()))
                 return r, False, False
@@ -114,7 +160,10 @@ class Torrent:
 
 
     def process_tracker(self, ti):
+        ### TODO:
+        ### think about if we want to add a collection colum for tracker
         #print("[i] adding trackers if new ones found")
+
         tracker_in_torrent = set(self.get_tracker(ti))
         tracker_in_db = set([t["url"] for t in self.db.tracker.find()])
         tracker_new = tracker_in_torrent - tracker_in_db
@@ -154,6 +203,7 @@ class Torrent:
         size_bytes = ti.total_size()
         self.db.torrent.insert(dict(file_name=self.file_name,
                             id=self.id,
+                            collection = self.collection,
                             infohash = infohash,
                             size_bytes = size_bytes,
                             creation_date = creation_date,

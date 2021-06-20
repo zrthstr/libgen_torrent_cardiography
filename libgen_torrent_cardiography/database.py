@@ -11,7 +11,6 @@ class Database:
                             primary_id='infohash',
                             primary_type=self.db.types.string(40),
                             )
-        #self.torrent = self.db['torrent']
         self.log = self.db['log']
 
         self.chk_schema()
@@ -32,9 +31,13 @@ class Database:
             # tracker.create_index(["name"])
             # foo.create_column('foo', unique=True)
 
+
+        ### NOTE: ID is not uniq. it is only uniq per collection.
+        ###       infohash is uniq!
         if self.torrent.find_one() == None:
             print("[+] init.db.torrent")
             self.torrent.create_column('file_name', self.db.types.text)
+            self.torrent.create_column('collection', self.db.types.text)
             self.torrent.create_column('seeders', self.db.types.integer)
             self.torrent.create_column('leechers', self.db.types.integer)
             self.torrent.create_column('completed', self.db.types.integer)

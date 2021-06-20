@@ -31,18 +31,17 @@ torrent_collection._load_all_from_db()
 #print("newest")
 #torrent_collection.newest()
 
-#torrent_collection.populate(count=10)
+torrent_collection.populate(count=10, collection="books")
+torrent_collection.populate(count=10, collection="scimag")
+torrent_collection.populate(count=10, collection="fiction")
+
 #torrent_collection.info()
 
 #torrent_collection.peer_crawl(1)
 
-ttt = Torrent(random.randint(0,50), db, config)
-#print(ttt)
-ttt.info()
-
-
-for loop in range(100):
-    torrent_collection.populate(count=10)
-    torrent_collection.peer_crawl(1)
-    ttt = Torrent(random.randint(0,50), db, config)
-    ttt.info()
+for collection in ["books", "scimag", "fiction"]:
+    for loop in range(100):
+        torrent_collection.populate(count=10, collection=collection)
+        torrent_collection.peer_crawl(1)
+        ttt = Torrent(random.randint(0,50), collection, db, config)
+        ttt.info()
