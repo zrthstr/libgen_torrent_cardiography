@@ -10,22 +10,39 @@ from torrent import Torrent
 
 from lib.ttsfix import scraper
 
-HTTP_GET_RETRY = 1  # move to config
+#HTTP_GET_RETRY = 1  # move to config
 
 
 class Torrent_collection:
 
-    TORRENT_DIR = Path("data/torrent") # get from config!
-    TORRENT_SRC = "https://libgen.is/repository_torrent/"
+
+
+    #TORRENT_DIR = dict(
+    #        books = Path("data/torrent/books"), # get from config!
+    #        scimag = Path("data/torrent/scimag"), # get from config!
+    #        fiction = Path("data/torrent/fiction"), # get from config!
+    #        )
+    #
+    ## TODO find out if httpS is okey
+    #TORRENT_SRC = dict(
+    #    books ="https://libgen.is/repository_torrent/",
+    #    scimag = "https://gen.lib.rus.ec/scimag/repository_torrent/",
+    #    fiction = "http://gen.lib.rus.ec/fiction/repository_torrent/" )
+    #
+    #TORRENT_MASK = dict(
+    #        books="r_{}.torrent",
+    #        ficton="f_{}.torrent",
+    #        scimag="sm_{}-{}.torrent")
+    #
+
 
     def __init__(self, db, config):
         self.db = db
         self.config = config
-        self.base_path = self.TORRENT_DIR
-        self.base_url = self.TORRENT_SRC
+        #self.base_path = self.TORRENT_DIR
+        #self.base_url = self.TORRENT_SRC
         self.members = self._load_all_from_db()
 
-        #print("config", config)
 
     def info(self):
         print("Info: ")
@@ -37,36 +54,36 @@ class Torrent_collection:
         return [ tor for tor in self.db.torrent.find()]
 
 
-    def newest(self):
-        last = self.db.torrent.find_one(order_by='-id')
+    def newest(self, collection):
+        last = self.db.torrent.find_one(order_by='-id', collection=collection)
         if last == None:
             return 0
         else:
             return last["id"]
 
 
-    def populate(self, count=1, col="r", only_count_absent=False):
-        base = self.newest() + 1
+    def populate(self, count=1, collection="books", only_count_absent=False):
+        base = self.newest(collection) + 1
 
         for n in range(0,count):
             next_one = base + n
             #print("[debug] populate :", n, base, next_one)
 
-            if self.is_known_missing(next_one):
+            if self.is_known_missing(next_one, collection):
                 print("[debug] known missing", next_one)
                 continue
 
-            tor = Torrent(next_one, self.db, self.config)
+            tor = Torrent(next_one, collection, self.db, self.config)
             self.members.append(tor)
 
 
-    def generate_libgen_torrent_filename(self):
-        name = (self.id ) * 1000
-        return f"r_{name:03}.torrent"
+    #def generate_libgen_torrent_filename(self, collection):
+    #    name = (self.id ) * 1000
+    #    return f"r_{name:03}.torrent"
 
 
-    def is_known_missing(self, newest, col="r"):
-        return newest *1000 in self.config["catalogue"]["r"]["known_missing"]
+    def is_known_missing(self, newest, collection):
+        return newest *1000 in self.config["catalogue"][collection]["known_missing"]
 
 
     def ensure_present(self, key, dictionary):
