@@ -1,0 +1,26 @@
+##
+really nice: https://btdig.com/
+
+Did you already search /r/Torrents? This topic comes up sometimes, there might be something else you may be able to use besides dhtcrawler2 e.g.
+
+https://www.reddit.com/r/torrents/comments/631ycj/magnetico_selfhosted_dht_search_engine_that_you/
+https://github.com/boramalper/magnetico
+
+magnetico sort of sounds like what you're looking for
+https://www.reddit.com/r/torrents/comments/afibhh/i_made_a_decentralized_torrent_search_site_with/
+https://github.com/urbanguacamole/torrent-paradise
+
+torrent-paradise has their spider DHT crawler code published on github
+https://www.reddit.com/r/torrents/comments/5jfllk/alphareign_new_torrent_search_engine_using/
+https://github.com/AlphaReign
+
+The site shut down but they did release the source for their DHT scraper, perhaps could be re-used
+https://www.reddit.com/r/torrents/comments/4wq93y/dhtbay_and_bitcannon_integration/
+https://github.com/FlyersWeb/dhtbay
+
+dhtbay seems like a DHT crawler mostly to use with Bitcannon
+Also note these sort of scrapers do use a fair amount of bandwidth, I don't know if they would be considered "self hosted" in the sense that you'd run them on your home internet connection..but you may already know that :) Interesting discussion on that in the magnetico github
+
+https://github.com/boramalper/magnetico/issues/10
+
+EDIT: Added torrent-paradise

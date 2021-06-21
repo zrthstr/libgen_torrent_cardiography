@@ -3,20 +3,25 @@
 
 	[catalogue.books]
 	known_missing  = [81000, 82000]
-	#src = http://libgen.rs/repository_torrent/
-	#dir = "data/torrent/r"
+	base_url = "http://libgen.rs/repository_torrent/"
+	dir = "data/torrent/books"
+	file_mask = "r_{:03}.torrent"
 
 	[catalogue.fiction]
 	known_missing  = []
-	#srv = http://libgen.rs/ficton/repository_torrent/
-	#dir = "data/torrent/fiction"
-
+	base_url = "http://libgen.rs/ficton/repository_torrent/"
+	dir = "data/torrent/fiction"
+	file_mask = "f_{:03}.torrent"
 
 	[catalogue.scimag]
 	known_missing  = []
-	#srv = https://
-	#dir = "data/torrent/scimag"
+	base_url = "http://gen.lib.rus.ec/scimag/repository_torrent/"
+	dir = "data/torrent/scimag"
+	file_mask = "sm_{:08}-{:08}.torrent"
 
 [peersearch]
 	udp_batchsize = 60
 	scraper_loglevel = "WARNING"
+
+[torrent_fetch]
+	http_get_retry = 2

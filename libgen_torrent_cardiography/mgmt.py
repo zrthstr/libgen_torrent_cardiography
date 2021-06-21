@@ -39,8 +39,8 @@ torrent_collection.populate(count=10, collection="fiction")
 
 #torrent_collection.peer_crawl(1)
 
-for collection in ["books", "scimag", "fiction"]:
-    for loop in range(100):
+for loop in range(100):
+    for collection in ["books", "scimag", "fiction"]:
         torrent_collection.populate(count=10, collection=collection)
         torrent_collection.peer_crawl(1)
         ttt = Torrent(random.randint(0,50), collection, db, config)

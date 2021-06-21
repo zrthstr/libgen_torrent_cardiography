@@ -5,18 +5,13 @@ from datetime import datetime
 from lib.ttsfix import scraper
 
 from tracker import Tracker, Tracker_collection
-
 from lib.ttsfix import scraper
 
 
-HTTP_GET_RETRY = 1  # move to config
 
 class Torrent:
-    #TORRENT_DIR = Path("data/torrent") # get from config!
-    #TORRENT_SRC = "https://libgen.is/repository_torrent/"
 
-
-
+    """
     ### TODO: Move to config
     TORRENT_DIR = dict(
             books = Path("data/torrent/books"), # get from config!
@@ -33,24 +28,20 @@ class Torrent:
             books="r_{}.torrent",
             ficton="f_{}.torrent",
             scimag="sm_{}-{}.torrent")
-
-
+    """
 
 
     def __init__(self, id, collection, db, config):
         self.db = db
-        #self.tracker_db = db.tracker
-        #self.torrent_db = db.torrent
-        #self.log_db = db.log
-
-        self.config = config
         self.id = id
         self.collection = collection
-        #assert collection in ["books", "scimag", "fictoin"]
+        self.config = config
+        assert collection in ["books", "scimag", "fictoin"]
 
+        HTTP_GET_RETRY = self.config["torrent_fetch"]["http_get_retry"]
         self.file_name = self.generate_libgen_torrent_filename()
-        self.full_path = self.TORRENT_DIR[collection] / self.file_name
-        self.url = self.TORRENT_SRC[collection] + self.file_name
+        self.full_path = Path(self.config["catalogue"][self.collection]["dir"]) / self.file_name
+        self.url = self.config["catalogue"][self.collection]["base_url"] + self.file_name
 
         tor = self.db.torrent.find_one(file_name=self.file_name)
         if not tor:
@@ -64,14 +55,19 @@ class Torrent:
         self.seeders = tor["seeders"]
         self.leechers = tor["leechers"]
         self.completed = tor["completed"]
+        self.dht_peers = tor["dht_peers"]
         self.creation_date = tor["creation_date"]
         self.size_bytes = tor["size_bytes"]
-        self.chk_fail_last = tor["chk_fail_last"]
-        self.chk_fail_count = tor["chk_fail_count"]
-        self.chk_success_last = tor["chk_success_last"]
-        self.chk_success_count = tor["chk_success_count"]
 
-        ## TODO: do we need to save this now?
+        self.scrape_fail_last = tor["scrape_fail_last"]
+        self.scrape_fail_count = tor["scrape_fail_count"]
+        self.scrape_success_last = tor["scrape_success_last"]
+        self.scrape_success_count = tor["scrape_success_count"]
+
+        self.dht_fail_last = tor["dht_fail_last"]
+        self.dht_fail_count = tor["dht_fail_count"]
+        self.dht_success_last = tor["dht_success_last"]
+        self.dht_success_count = tor["dht_success_count"]
 
 
     def info(self):
@@ -81,15 +77,20 @@ class Torrent:
         print(f"    seeders:                 {self.seeders}")
         print(f"    leechers:                {self.leechers}")
         print(f"    completed:               {self.completed}")
+        print(f"    dht_peers:               {self.dht_peers}")
         print(f"    id:                      {self.id}")
         print(f"    creation_date:           {self.creation_date}")
         print(f"    full_path:               {self.full_path}")
         print(f"    url:                     {self.url}")
         print(f"    size_bytes:              {self.size_bytes}")
-        print(f"    chk_fail_last:           {self.chk_fail_last}")
-        print(f"    chk_fail_count:          {self.chk_fail_count}")
-        print(f"    chk_success_last:        {self.chk_success_last}")
-        print(f"    chk_success_count:       {self.chk_success_count}")
+        print(f"    scrape_fail_last:        {self.scrape_fail_last}")
+        print(f"    scrape_fail_count:       {self.scrape_fail_count}")
+        print(f"    scrape_success_last:     {self.scrape_success_last}")
+        print(f"    scrape_success_count     {self.scrape_success_count}")
+        print(f"    dht_fail_last:           {self.dht_fail_last}")
+        print(f"    dht_fail_count:          {self.dht_fail_count}")
+        print(f"    dht_success_last:        {self.dht_success_last}")
+        print(f"    dht_success_count:       {self.dht_success_count}")
 
 
     def generate_libgen_torrent_filename(self):
@@ -98,20 +99,18 @@ class Torrent:
 
         name = (self.id ) * 1000
         if self.collection == "books":
-            return f"r_{name:03}.torrent"
+            return self.config["catalogue"][self.collection]["file_mask"].format(name)
 
         elif self.collection == "fiction":
             ### handle this small inconsistency
             if name:
-                return f"f_{name:03}.torrent"
+                return self.config["catalogue"][self.collection]["file_mask"].format(name)
             return "f_0.torrent"
 
         elif self.collection == "scimag":
             name = name * 100
             name_to = name + 99999
-            #print(name, name_to)
-            #exit()
-            return f"sm_{name:08}-{name_to:08}.torrent"
+            return self.config["catalogue"][self.collection]["file_mask"].format(name, name_to)
         else:
             print("[Debug] unknown collection")
             exit()
@@ -173,16 +172,6 @@ class Torrent:
 
         print(f"[+] Adding {len(tracker_new)} new tracker")
         for url in tracker_new:
-            #print(f"[debug] insertring: {name}")
-            """
-            self.db.tracker.insert(dict(url=url,
-                                chk_success_count=0,
-                                chk_success_last=None,
-                                chk_fail_count=0,
-                                chk_fail_last=None,
-                                ))
-            """
-            #print("URL", url)
             tracker = Tracker(self.db, url)
 
         self.db.log.insert(dict(name=self.file_name,
@@ -195,6 +184,7 @@ class Torrent:
 
 
     def save_to_db(self):
+        ### TODO find out if we really need this block ???? :D
         print(f'[+] Saving new torrent to DB from file {self.full_path} ')
         ti = lt.torrent_info(str(self.full_path))
         creation_date = ti.creation_date()
@@ -207,10 +197,15 @@ class Torrent:
                             infohash = infohash,
                             size_bytes = size_bytes,
                             creation_date = creation_date,
-                            chk_fail_count = 0,
-                            chk_fail_last = None,
-                            chk_success_count = 0,
-                            chk_success_last = None,
+                            dht_peers = 0,
+                            dht_fail_count = 0,
+                            dht_fail_last = None,
+                            dht_success_count = 0,
+                            dht_success_last = None,
+                            scrape_fail_count = 0,
+                            scrape_fail_last = None,
+                            scrape_success_count = 0,
+                            scrape_success_last = None,
                             completed = None,
                             #leecher = None, # TODO hmmm why do we not need this?
                             #seeder = None,

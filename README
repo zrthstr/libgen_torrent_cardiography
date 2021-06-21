@@ -63,6 +63,12 @@ UDP NAT PUNCH https://github.com/inconshreveable/ngrok/issues/26#issuecomment-69
 https://en.wikipedia.org/wiki/Kademlia
 https://en.wikipedia.org/wiki/Internet_Gateway_Device_Protocol
 
+http://www.bittorrent.org/beps/bep_0033.html
+
 ### tools
 https://github.com/arvidn/torrent-tools > torrent-print > print the content of a .torrent file to stdout
 https://github.com/arvidn/bootstrap-dht
+
+### vision
+* see https://github.com/Tribler/tribler
+* make libgen-seed-tools use DHT directly?

@@ -15,27 +15,6 @@ from lib.ttsfix import scraper
 
 class Torrent_collection:
 
-
-
-    #TORRENT_DIR = dict(
-    #        books = Path("data/torrent/books"), # get from config!
-    #        scimag = Path("data/torrent/scimag"), # get from config!
-    #        fiction = Path("data/torrent/fiction"), # get from config!
-    #        )
-    #
-    ## TODO find out if httpS is okey
-    #TORRENT_SRC = dict(
-    #    books ="https://libgen.is/repository_torrent/",
-    #    scimag = "https://gen.lib.rus.ec/scimag/repository_torrent/",
-    #    fiction = "http://gen.lib.rus.ec/fiction/repository_torrent/" )
-    #
-    #TORRENT_MASK = dict(
-    #        books="r_{}.torrent",
-    #        ficton="f_{}.torrent",
-    #        scimag="sm_{}-{}.torrent")
-    #
-
-
     def __init__(self, db, config):
         self.db = db
         self.config = config
@@ -75,11 +54,6 @@ class Torrent_collection:
 
             tor = Torrent(next_one, collection, self.db, self.config)
             self.members.append(tor)
-
-
-    #def generate_libgen_torrent_filename(self, collection):
-    #    name = (self.id ) * 1000
-    #    return f"r_{name:03}.torrent"
 
 
     def is_known_missing(self, newest, collection):
@@ -216,14 +190,8 @@ class Torrent_collection:
 
 
     def save_result(self, max_results, timeouts, successful_trackers):
-
-        # TODO:
-        #   * calculate what torrents failed at updating
-        #       * we can do this by comparing the questions and the answers
-        #       * update timestamp and fail count on fail
-
-        print("timeouts: ",timeouts)
-        print("successful_trackers: ",successful_trackers)
+        #print("timeouts: ",timeouts)
+        #print("successful_trackers: ",successful_trackers)
 
         successful_and_timeout = set(successful_trackers) & set(timeouts)
         if successful_and_timeout:
@@ -246,8 +214,8 @@ class Torrent_collection:
 
         # TODO: make this oo! see tracker..
         for res in max_results:
-            res["chk_success_last"] = datetime.utcnow()
-            res["chk_success_count"] = 1 + self.db.torrent.find_one(infohash=res["infohash"])["chk_success_count"]
+            res["scrape_success_last"] = datetime.utcnow()
+            res["scrape_success_count"] = 1 + self.db.torrent.find_one(infohash=res["infohash"])["scrape_success_count"]
             self.db.torrent.update(res, ['infohash'], return_count=True, ensure=False )
 
 
@@ -259,7 +227,7 @@ class Torrent_collection:
 
         #TODO: do we also want to use not UDP tackers?
         # other_tracker = set(all_tracker) - set(udp_tracker)
-        #
+        
         loglevel = self.config["peersearch"]["scraper_loglevel"]
 
         scr = scraper.Scraper(
@@ -303,7 +271,7 @@ class Torrent_collection:
     def peer_crawl(self, count=1):
         for n in range(0,count):
             limit = self.config["peersearch"]["udp_batchsize"]
-            oldest_n = self.db.torrent.find(order_by='chk_success_last', _limit=limit)
+            oldest_n = self.db.torrent.find(order_by='scrape_success_last', _limit=limit)
             oldest_n_ih = [ t["infohash"] for t in oldest_n ]
             #print(oldest_n_ih)
             self.peer_exchange_m(oldest_n_ih)  ## TOTO RNAME
