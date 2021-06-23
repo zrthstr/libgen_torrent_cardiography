@@ -22,6 +22,9 @@ class Torrent_collection:
         #self.base_url = self.TORRENT_SRC
         self.members = self._load_all_from_db()
 
+        # is set to ture if we have fetched all torrents for the collection
+        self.done_for_now = False
+
 
     def info(self):
         print("Info: ")
@@ -40,7 +43,16 @@ class Torrent_collection:
         else:
             return last["id"]
 
+    def is_not_existent(self, next_one, collection):
+            next_one *= 1000
+            if collection == "scimag":
+                next_one *= 1000
+            print("nect_one", next_one)
+            print("AN: ", self.config["catalogue"][collection]["not_yet_existent"])
+            return next_one >= self.config["catalogue"][collection]["not_yet_existent"]
 
+
+    # TODO: clean paramters
     def populate(self, count=1, collection="books", only_count_absent=False):
         base = self.newest(collection) + 1
 
@@ -52,11 +64,16 @@ class Torrent_collection:
                 print("[debug] known missing", next_one)
                 continue
 
+            if self.is_not_existent(next_one, collection):
+                print(f"[Info] We have all torrents for collection: {collection}")
+                return
+
             tor = Torrent(next_one, collection, self.db, self.config)
             self.members.append(tor)
 
 
     def is_known_missing(self, newest, collection):
+        ## TODO move this and all similare references to top of obj
         return newest *1000 in self.config["catalogue"][collection]["known_missing"]
 
 
@@ -219,7 +236,7 @@ class Torrent_collection:
             self.db.torrent.update(res, ['infohash'], return_count=True, ensure=False )
 
 
-
+    ### TODO: rename. this should be called tracker_scrape?
     def peer_exchange_m(self, info_hash_list):
         tracker_collection = Tracker_collection(self.db)
         all_tracker = tracker_collection.all()
@@ -278,6 +295,9 @@ class Torrent_collection:
 
 
     def chk_for_new(self):
+        ### TODO
+        ### look if "last" exists 
+        ### if yes, rewrite config and procede
         pass
 
     def integrety_check_libgen(self):

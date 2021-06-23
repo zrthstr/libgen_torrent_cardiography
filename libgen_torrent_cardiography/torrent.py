@@ -11,34 +11,14 @@ from lib.ttsfix import scraper
 
 class Torrent:
 
-    """
-    ### TODO: Move to config
-    TORRENT_DIR = dict(
-            books = Path("data/torrent/books"), # get from config!
-            scimag = Path("data/torrent/scimag"), # get from config!
-            fiction = Path("data/torrent/fiction"), # get from config!
-            )
-
-    TORRENT_SRC = dict(
-        books ="https://libgen.is/repository_torrent/",
-        scimag = "http://gen.lib.rus.ec/scimag/repository_torrent/",
-        fiction = "http://gen.lib.rus.ec/fiction/repository_torrent/" )
-
-    TORRENT_MASK = dict(
-            books="r_{}.torrent",
-            ficton="f_{}.torrent",
-            scimag="sm_{}-{}.torrent")
-    """
-
-
     def __init__(self, id, collection, db, config):
         self.db = db
         self.id = id
         self.collection = collection
         self.config = config
-        assert collection in ["books", "scimag", "fictoin"]
+        assert collection in ["books", "scimag", "fiction"]
 
-        HTTP_GET_RETRY = self.config["torrent_fetch"]["http_get_retry"]
+        self.HTTP_GET_RETRY = self.config["torrent_fetch"]["http_get_retry"]
         self.file_name = self.generate_libgen_torrent_filename()
         self.full_path = Path(self.config["catalogue"][self.collection]["dir"]) / self.file_name
         self.url = self.config["catalogue"][self.collection]["base_url"] + self.file_name
@@ -145,7 +125,7 @@ class Torrent:
             #print(f"[debug] found f{self.full_path} in dir")
             return 'found'
 
-        for e in range(HTTP_GET_RETRY+1):
+        for e in range(self.HTTP_GET_RETRY+1):
             r, retry, success = self.get_http()
             if retry == False:
                 break

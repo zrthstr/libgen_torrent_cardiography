@@ -26,3 +26,6 @@ dbinfo:
 
 dbdump:
 	bash tools/dbdump.sh
+
+output:
+	poetry run python  libgen_torrent_cardiography/output.py

@@ -6,18 +6,21 @@
 	base_url = "http://libgen.rs/repository_torrent/"
 	dir = "data/torrent/books"
 	file_mask = "r_{:03}.torrent"
+	not_yet_existent = 3007000
 
 	[catalogue.fiction]
 	known_missing  = []
 	base_url = "http://libgen.rs/ficton/repository_torrent/"
 	dir = "data/torrent/fiction"
 	file_mask = "f_{:03}.torrent"
+	not_yet_existent = 41000
 
 	[catalogue.scimag]
 	known_missing  = []
 	base_url = "http://gen.lib.rus.ec/scimag/repository_torrent/"
 	dir = "data/torrent/scimag"
 	file_mask = "sm_{:08}-{:08}.torrent"
+	not_yet_existent = 85200000
 
 [peersearch]
 	udp_batchsize = 60
