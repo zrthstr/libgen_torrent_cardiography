@@ -1,3 +1,6 @@
+[output]
+html = "output/torrent.html"
+json = "output/torrent.json"
 
 [catalogue]
 
@@ -10,10 +13,10 @@
 
 	[catalogue.fiction]
 	known_missing  = []
-	base_url = "http://libgen.rs/ficton/repository_torrent/"
+	base_url = "http://libgen.rs/fiction/repository_torrent/"
 	dir = "data/torrent/fiction"
 	file_mask = "f_{:03}.torrent"
-	not_yet_existent = 41000
+	not_yet_existent = 2327000
 
 	[catalogue.scimag]
 	known_missing  = []

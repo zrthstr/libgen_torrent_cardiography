@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %} SOME TITLE {% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+<table>
+    <thead>
+        <th>Info Hash</th>
+        <th data-sort-method="number" data-sort-default="">Name</th>
+        <th>Link</th>
+        <th>Size</th>
+        <th data-sort-method="number">Seeders</th>
+        <th data-sort-method="number">Leechers</th>
+        <th data-sort-method="number">Scraped</th>
+        <th>Type</th>
+        <th>Last Updated</th>
+    </thead>
+    <tbody>
+{% for row in data %}
+<tr>
+  <td>  {{row.infohash}} </td>
+  <td>  {{row.name}} </td>
+  <td>  {{row.link}} </td>
+  <td>  {{row.size| filesizeformat}} </td>
+  <td>  {{row.seeders}} </td>
+  <td>  {{row.leechers}} </td>
+  <td>  {{row.scraped}} </td>
+  <td>  {{row.dht_peers}} </td>
+  <td>  {{row.dht_scraped}} </td>
+  <td>  {{row.type}} </td>
+  <td>  {{row.last_updated}} </td>
+  <td>  {{row.time_ago}} </td>
+</tr>
+{% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

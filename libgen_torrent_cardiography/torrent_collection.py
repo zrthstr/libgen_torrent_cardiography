@@ -33,7 +33,7 @@ class Torrent_collection:
 
 
     def _load_all_from_db(self):
-        return [ tor for tor in self.db.torrent.find()]
+        return [ Torrent(tor["id"], tor["collection"], self.db, self.config ) for tor in self.db.torrent.find()]
 
 
     def newest(self, collection):

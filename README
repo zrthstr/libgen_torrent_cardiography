@@ -2,6 +2,11 @@
 monitor libgen torrent (sci-hub) health.
 e.g. number of seeders per torrent
 
+
+## TODO
+make html output sortable
+
+
 ## about libgen data and torrents
 SEE http://libgen.lc/stat.php
 * libgen consists of a few different catalogues of files

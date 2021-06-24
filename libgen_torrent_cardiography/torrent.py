@@ -11,7 +11,9 @@ from lib.ttsfix import scraper
 
 class Torrent:
 
+    # TODO, replace id with infohash, if possible
     def __init__(self, id, collection, db, config):
+    #def __init__(self, infohash, collection, db, config):
         self.db = db
         self.id = id
         self.collection = collection
@@ -21,7 +23,8 @@ class Torrent:
         self.HTTP_GET_RETRY = self.config["torrent_fetch"]["http_get_retry"]
         self.file_name = self.generate_libgen_torrent_filename()
         self.full_path = Path(self.config["catalogue"][self.collection]["dir"]) / self.file_name
-        self.url = self.config["catalogue"][self.collection]["base_url"] + self.file_name
+        #self.url = self.config["catalogue"][self.collection]["base_url"] + self.file_name
+        self.url = self.generate_url()
 
         tor = self.db.torrent.find_one(file_name=self.file_name)
         if not tor:
@@ -71,6 +74,11 @@ class Torrent:
         print(f"    dht_fail_count:          {self.dht_fail_count}")
         print(f"    dht_success_last:        {self.dht_success_last}")
         print(f"    dht_success_count:       {self.dht_success_count}")
+
+
+
+    def generate_url(self):
+        return self.config["catalogue"][self.collection]["base_url"] + self.file_name
 
 
     def generate_libgen_torrent_filename(self):

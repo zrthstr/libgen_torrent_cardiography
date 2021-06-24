@@ -22,10 +22,10 @@ db = Database()
 #db.integrety_chk()
 #db.info()
 
-output = Output(db, config)
 
 
 torrent_collection = Torrent_collection(db, config)
+output = Output(torrent_collection)
 
 #torrent_collection.info()
 torrent_collection._load_all_from_db()
@@ -33,6 +33,12 @@ torrent_collection._load_all_from_db()
 
 #print("newest")
 #torrent_collection.newest()
+
+output.generate()
+
+
+
+#exit()
 
 torrent_collection.populate(count=10, collection="books")
 torrent_collection.populate(count=10, collection="scimag")
@@ -42,10 +48,11 @@ torrent_collection.populate(count=10, collection="fiction")
 
 #torrent_collection.peer_crawl(1)
 
+
 for loop in range(100):
-    #for collection in ["books", "scimag", "fiction"]:
-    for collection in ["fiction"]:
-        torrent_collection.populate(count=10, collection=collection)
+    for collection in ["books", "scimag", "fiction"]:
+    #for collection in ["fiction"]:
+        #torrent_collection.populate(count=10, collection=collection)
         torrent_collection.peer_crawl(1)
         print("loop", loop)
 
@@ -55,4 +62,3 @@ for loop in range(100):
         #ttt = Torrent(random.randint(0,50), collection, db, config)
         #ttt.info()
 
-    output.generate()
