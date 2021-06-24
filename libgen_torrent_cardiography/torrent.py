@@ -11,20 +11,26 @@ from lib.ttsfix import scraper
 
 class Torrent:
 
+
     # TODO, replace id with infohash, if possible
     def __init__(self, id, collection, db, config):
     #def __init__(self, infohash, collection, db, config):
+
         self.db = db
         self.id = id
         self.collection = collection
+
         self.config = config
         assert collection in ["books", "scimag", "fiction"]
 
+
         self.HTTP_GET_RETRY = self.config["torrent_fetch"]["http_get_retry"]
         self.file_name = self.generate_libgen_torrent_filename()
+
         self.full_path = Path(self.config["catalogue"][self.collection]["dir"]) / self.file_name
         #self.url = self.config["catalogue"][self.collection]["base_url"] + self.file_name
         self.url = self.generate_url()
+
 
         tor = self.db.torrent.find_one(file_name=self.file_name)
         if not tor:
@@ -87,18 +93,24 @@ class Torrent:
 
         name = (self.id ) * 1000
         if self.collection == "books":
+
             return self.config["catalogue"][self.collection]["file_mask"].format(name)
+
 
         elif self.collection == "fiction":
             ### handle this small inconsistency
             if name:
+
                 return self.config["catalogue"][self.collection]["file_mask"].format(name)
+
             return "f_0.torrent"
 
         elif self.collection == "scimag":
             name = name * 100
             name_to = name + 99999
+
             return self.config["catalogue"][self.collection]["file_mask"].format(name, name_to)
+
         else:
             print("[Debug] unknown collection")
             exit()

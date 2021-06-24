@@ -25,6 +25,12 @@ json = "output/torrent.json"
 	file_mask = "sm_{:08}-{:08}.torrent"
 	not_yet_existent = 85200000
 
+
+	[catalogue.scimag]
+	known_missing  = []
+	#srv = https://
+	#dir = "data/torrent/scimag"
+
 [peersearch]
 	udp_batchsize = 60
 	scraper_loglevel = "WARNING"

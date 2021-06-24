@@ -26,6 +26,7 @@ class Torrent_collection:
         self.done_for_now = False
 
 
+
     def info(self):
         print("Info: ")
         for tor in self.members:
@@ -51,7 +52,7 @@ class Torrent_collection:
             print("AN: ", self.config["catalogue"][collection]["not_yet_existent"])
             return next_one >= self.config["catalogue"][collection]["not_yet_existent"]
 
-
+          
     # TODO: clean paramters
     def populate(self, count=1, collection="books", only_count_absent=False):
         base = self.newest(collection) + 1
@@ -64,6 +65,7 @@ class Torrent_collection:
                 print("[debug] known missing", next_one)
                 continue
 
+
             if self.is_not_existent(next_one, collection):
                 print(f"[Info] We have all torrents for collection: {collection}")
                 return
@@ -74,6 +76,7 @@ class Torrent_collection:
 
     def is_known_missing(self, newest, collection):
         ## TODO move this and all similare references to top of obj
+
         return newest *1000 in self.config["catalogue"][collection]["known_missing"]
 
 

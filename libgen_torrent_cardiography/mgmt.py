@@ -37,9 +37,6 @@ torrent_collection._load_all_from_db()
 output.generate()
 
 
-
-#exit()
-
 torrent_collection.populate(count=10, collection="books")
 torrent_collection.populate(count=10, collection="scimag")
 torrent_collection.populate(count=10, collection="fiction")
@@ -61,4 +58,5 @@ for loop in range(100):
         ## we could add check that we have in collection populate to torrent
         #ttt = Torrent(random.randint(0,50), collection, db, config)
         #ttt.info()
+
 
