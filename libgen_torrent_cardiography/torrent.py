@@ -1,15 +1,15 @@
 import requests
-import libtorrent as lt
 from pathlib import Path
 from datetime import datetime
-from lib.ttsfix import scraper
+
+# from lib.ttsfix import scraper
+import libtorrent as lt
 
 from tracker import Tracker, Tracker_collection
 from lib.ttsfix import scraper
 
 
 class Torrent:
-
     def __init__(self, id, collection, db, config):
         self.db = db
         self.id = id
@@ -79,25 +79,24 @@ class Torrent:
         if self.collection == "books":
             return self.config["catalogue"][self.collection]["file_mask"].format(name)
 
-        elif self.collection == "fiction":
+        if self.collection == "fiction":
             if name:
                 return self.config["catalogue"][self.collection]["file_mask"].format(
                     name
                 )
             return "f_0.torrent"
 
-        elif self.collection == "scimag":
+        if self.collection == "scimag":
             name = name * 100
             name_to = name + 99999
             return self.config["catalogue"][self.collection]["file_mask"].format(
                 name, name_to
             )
-        else:
-            print("[Debug] unknown collection")
-            exit()
+        print("[Debug] unknown collection")
+        exit()
 
     def get_http(self):
-        """ returns: Request obj, Retry, Success """
+        """returns: Request obj, Retry, Success"""
         try:
             r = requests.get(self.url)
             if r.status_code == 200:
@@ -128,9 +127,9 @@ class Torrent:
             # print(f"[debug] found f{self.full_path} in dir")
             return "found"
 
-        for e in range(self.HTTP_GET_RETRY + 1):
+        for _ in range(self.HTTP_GET_RETRY + 1):
             r, retry, success = self.get_http()
-            if retry == False:
+            if retry is False:
                 break
 
         if not success:
@@ -141,9 +140,6 @@ class Torrent:
         print(f"[+] file {self.id} fetched and writen ({self.url})")
 
     def process_tracker(self, ti):
-        ### TODO:
-        ### think about if we want to add a collection colum for tracker
-        # print("[i] adding trackers if new ones found")
 
         tracker_in_torrent = set(self.get_tracker(ti))
         tracker_in_db = set([t["url"] for t in self.db.tracker.find()])
@@ -154,7 +150,7 @@ class Torrent:
 
         print(f"[+] Adding {len(tracker_new)} new tracker")
         for url in tracker_new:
-            tracker = Tracker(self.db, url)
+            _ = Tracker(self.db, url)
 
         self.db.log.insert(
             dict(
@@ -168,7 +164,6 @@ class Torrent:
         return [t.url for t in ti.trackers()]
 
     def save_to_db(self):
-        ### TODO find out if we really need this block ???? :D
         print(f"[+] Saving new torrent to DB from file {self.full_path} ")
         ti = lt.torrent_info(str(self.full_path))
         creation_date = ti.creation_date()
@@ -193,13 +188,8 @@ class Torrent:
                 scrape_success_count=0,
                 scrape_success_last=None,
                 completed=None,
-                # leecher = None, # TODO hmmm why do we not need this?
-                # seeder = None,
             )
         )
-
-        # new_tracker = [e.url for e in ti.trackers()]
-        # trackers.update_ignore()
 
         self.db.log.insert(
             dict(

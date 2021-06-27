@@ -18,7 +18,7 @@ class Database:
         return dataset.connect(self.config["db"]["connection"])
 
     def chk_schema(self):
-        if self.tracker.find_one() == None:
+        if self.tracker.find_one() is None:
             print("[+] init.db.tracker")
             self.tracker.create_column("url", self.db.types.text)
             self.tracker.create_column("chk_success_count", self.db.types.integer)
@@ -35,7 +35,7 @@ class Database:
         ### it is only uniq per collection
         ### id referes to the libgen id, not "a db id"
 
-        if self.torrent.find_one() == None:
+        if self.torrent.find_one() is None:
             print("[+] init.db.torrent")
             self.torrent.create_column("file_name", self.db.types.text)
             self.torrent.create_column("collection", self.db.types.text)
@@ -54,27 +54,23 @@ class Database:
             self.torrent.create_column("dht_success_last", self.db.types.datetime)
             self.torrent.create_column("dht_success_count", self.db.types.integer)
 
-
-        if self.log.find_one() == None:
+        if self.log.find_one() is None:
             print("[+] init.db.log")
             self.log.create_column("name", self.db.types.text)
             self.log.create_column("status", self.db.types.text)
             self.log.create_column("datetime", self.db.types.datetime)
 
-
     def count_and_print(self, table):
         print(f"[i] table {table.name} has {table.count()} rows with columns:")
         print(f"    {table.columns}")
-
 
     def info(self):
         # for table in db.tables:
         for table in [self.tracker, self.torrent, self.log]:
             self.count_and_print(table)
 
-
     def integrety_chk(self):
-        print("this __SHOULD__ be and integrety check")
+        # print("this __SHOULD__ be and integrety check")
         ### make sure:
         ### * no torrents have been skipped
         ### * ID and file_name fitt
