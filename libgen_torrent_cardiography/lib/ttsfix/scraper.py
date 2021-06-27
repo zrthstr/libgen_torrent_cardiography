@@ -16,7 +16,7 @@ import requests
 # TODO: Improve logger format to include process id
 logging.basicConfig()
 logger = logging.getLogger(__name__)
-#logger.setLevel(logging.DEBUG)
+# logger.setLevel(logging.DEBUG)
 logger.setLevel(logging.INFO)
 
 # Protocol says to keep it that way (https://www.bittorrent.org/beps/bep_0015.html)
@@ -84,10 +84,11 @@ class Connection:
 
 class Scraper:
     def __init__(
-        self, trackers: List = [],
+        self,
+        trackers: List = [],
         infohashes: Tuple[List, str] = [],
         timeout: int = 10,
-        loglevel: str = "DEBUG"
+        loglevel: str = "DEBUG",
     ):
         """
         Launches a scraper bound to a particular tracker
@@ -106,7 +107,7 @@ class Scraper:
     def get_good_infohashes(self) -> list:
         if getattr(self, "good_infohashes", None):
             return self.good_infohashes
-            
+
         good_infohashes = []
         if isinstance(self.infohashes, str):
             infohashes_list = self.infohashes.split(",")
@@ -143,12 +144,11 @@ class Scraper:
         self.connection.sock.send(packet)
         # Receive a Connect Request response
 
-
         # TODO TODO TODO
-        #res = self.connection.sock.recv(16)
+        # res = self.connection.sock.recv(16)
         res = self.connection.sock.recv(16)
         try:
-            #res = self.connection.sock.recv(16)
+            # res = self.connection.sock.recv(16)
             _, response_transaction_id, connection_id = struct.unpack(">LLQ", res)
         except struct.error as e:
             logger.error("Unpacking connect request response failed: %s", e)
@@ -159,7 +159,12 @@ class Scraper:
     def _scrape_response(self, transaction_id: int, connection_id: int):
         packet_hashes = self.get_packet_hashes()
         packet = (
-            struct.pack(">QLL", connection_id, TRACKER_ACTION.SCRAPE, transaction_id,)
+            struct.pack(
+                ">QLL",
+                connection_id,
+                TRACKER_ACTION.SCRAPE,
+                transaction_id,
+            )
             + packet_hashes
         )
         self.connection.sock.send(packet)
@@ -182,10 +187,8 @@ class Scraper:
             ]
             if len(response) != struct.calcsize(">LLL"):
                 # TODO: Improve error messages
-                result[
-                    "error"
-                ] = f"Could not get stats from [{self.connection}]"
-                #] = f"Could not get stats for infohash [{self.connection}]"
+                result["error"] = f"Could not get stats from [{self.connection}]"
+                # ] = f"Could not get stats for infohash [{self.connection}]"
                 results.append(result)
                 logger.error("Result error: %s", result)
                 continue
@@ -241,11 +244,14 @@ class Scraper:
             logger.error("Connection refused for %s: %s", self.connection, e)
             return ["Connection refused for %s: %s" % (self.connection, e)]
 
-
         if transaction_id != response_transaction_id:
             raise RuntimeError(
                 "Transaction ID doesnt match in connect request [%s]. Expected %d, got %d"
-                % (self.connection, transaction_id, response_transaction_id,)
+                % (
+                    self.connection,
+                    transaction_id,
+                    response_transaction_id,
+                )
             )
 
         # holds bad error messages
@@ -266,8 +272,8 @@ class Scraper:
         :return: [(infohash, seeders, leechers, completed),...]
         """
 
-        #self.get_good_infohashes()
-        #print(self.get_good_infohashes())
+        # self.get_good_infohashes()
+        # print(self.get_good_infohashes())
         self.trackers = self.get_trackers()
 
         if not self.good_infohashes:

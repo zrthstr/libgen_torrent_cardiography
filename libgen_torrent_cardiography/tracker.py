@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 class Tracker:
     def __init__(self, db, url):
         self.url = url
@@ -7,21 +8,19 @@ class Tracker:
 
         tra = self.db.tracker.find_one(url=self.url)
         if not tra:
-            #self._new()
-            self.chk_success_count= 0
-            self.chk_fail_count= 0
-            self.chk_fail_last= None
-            self.chk_success_last= None
+            # self._new()
+            self.chk_success_count = 0
+            self.chk_fail_count = 0
+            self.chk_fail_last = None
+            self.chk_success_last = None
 
             self._save_to_db()
             tra = self.db.tracker.find_one(url=self.url)
-
 
         self.chk_success_count = tra["chk_success_count"]
         self.chk_fail_count = tra["chk_fail_count"]
         self.chk_fail_last = tra["chk_fail_last"]
         self.chk_success_last = tra["chk_success_last"]
-
 
     def increment_fail_count(self):
         self.chk_fail_count += 1
@@ -33,21 +32,22 @@ class Tracker:
         self.chk_success_last = datetime.utcnow()
         self._save_to_db()
 
-
     def _save_to_db(self):
-        tr = dict(url = self.url,
-                chk_success_count = self.chk_success_count,
-                chk_fail_count = self.chk_fail_count,
-                chk_fail_last = self.chk_fail_last,
-                chk_success_last = self.chk_success_last)
+        tr = dict(
+            url=self.url,
+            chk_success_count=self.chk_success_count,
+            chk_fail_count=self.chk_fail_count,
+            chk_fail_last=self.chk_fail_last,
+            chk_success_last=self.chk_success_last,
+        )
 
-        #self.db.tracker.update(tr, ['url'])
-        self.db.tracker.upsert(tr, ['url'])
+        # self.db.tracker.update(tr, ['url'])
+        self.db.tracker.upsert(tr, ["url"])
 
 
 class Tracker_collection:
     def __init__(self, db):
-        #mself.tracker = []
+        # mself.tracker = []
         self.db = db
 
     def add(self, tracker):
@@ -58,5 +58,3 @@ class Tracker_collection:
 
     def count(self):
         return db["tracker"].count()
-
-
