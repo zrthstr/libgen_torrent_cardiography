@@ -270,7 +270,7 @@ class Torrent_collection:
             )
             oldest_n_ih = [t["infohash"] for t in oldest_n]
             # print(oldest_n_ih)
-            self.tracker_scrape(oldest_n_ih)  ## TOTO RNAME
+            self.tracker_scrape(oldest_n_ih)
 
     def chk_for_new(self):
         ### TODO

@@ -145,10 +145,9 @@ class Scraper:
         # Receive a Connect Request response
 
         # TODO TODO TODO
-        # res = self.connection.sock.recv(16)
-        res = self.connection.sock.recv(16)
+        #res = self.connection.sock.recv(16)
         try:
-            # res = self.connection.sock.recv(16)
+            res = self.connection.sock.recv(16)
             _, response_transaction_id, connection_id = struct.unpack(">LLQ", res)
         except struct.error as e:
             logger.error("Unpacking connect request response failed: %s", e)
@@ -243,6 +242,10 @@ class Scraper:
         except ConnectionRefusedError as e:
             logger.error("Connection refused for %s: %s", self.connection, e)
             return ["Connection refused for %s: %s" % (self.connection, e)]
+        except OSError as e:
+            logger.error("No route to host %s: %s", self.connection, e)
+            return ["No route to host %s: %s" % (self.connection, e)]
+
 
         if transaction_id != response_transaction_id:
             raise RuntimeError(
