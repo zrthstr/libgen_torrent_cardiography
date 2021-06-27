@@ -18,12 +18,11 @@ output = Output(torrent_collection)
 # torrent_collection._load_all_from_db()
 # torrent_collection.info()
 
-output.generate()
 # exit()
 
-torrent_collection.populate(count=10, collection="books")
-torrent_collection.populate(count=10, collection="scimag")
-torrent_collection.populate(count=10, collection="fiction")
+#torrent_collection.populate(count=10, collection="books")
+#torrent_collection.populate(count=10, collection="scimag")
+#torrent_collection.populate(count=10, collection="fiction")
 
 # torrent_collection.info()
 # torrent_collection.peer_crawl(1)
@@ -31,3 +30,5 @@ torrent_collection.populate(count=10, collection="fiction")
 for loop in range(100):
     for collection in ["books", "scimag", "fiction"]:
         torrent_collection.peer_crawl(1)
+        torrent_collection.populate(count=30, collection=collection)
+    output.generate()

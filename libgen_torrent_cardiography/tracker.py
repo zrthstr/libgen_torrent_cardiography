@@ -41,7 +41,6 @@ class Tracker:
             chk_success_last=self.chk_success_last,
         )
 
-        # self.db.tracker.update(tr, ['url'])
         self.db.tracker.upsert(tr, ["url"])
 
 
