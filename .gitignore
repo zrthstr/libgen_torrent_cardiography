@@ -1,5 +1,6 @@
 _git/
 data
+!data/ltc.sqlite
 9fc20b9e98ea98b4a35e6223041a5ef94ea27809/
 __pycache__
 r_000.torrent
