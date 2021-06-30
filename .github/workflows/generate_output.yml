@@ -19,7 +19,7 @@ jobs:
         run: make mgmt
 
       - name: git st
-        run: git st
+        run: git status
 
 
 
