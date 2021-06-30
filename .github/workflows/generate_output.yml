@@ -12,8 +12,11 @@ jobs:
         uses: abatilo/actions-poetry@v2.0.0
 #        #with:
 #          poetry-version: ${{ matrix.poetry-version }}
-      - name: make env - run poetry
+      - name: make env - run poetry install
         run: make env
+      - name: run main programm
+        run: make mgmt
+
 
 
 #      - name: save current date
