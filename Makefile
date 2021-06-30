@@ -4,6 +4,8 @@
 
 mgmt:
 	poetry run python libgen_torrent_cardiography/mgmt.py
+	# Merge main db file with wal
+	sqlite3 data/ltc.sqlite  VACUUM;
 
 #################
 ### db things ###
