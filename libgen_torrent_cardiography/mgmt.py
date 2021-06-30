@@ -23,7 +23,7 @@ output = Output(torrent_collection)
 
 # exit()
 
-torrent_collection.populate(count=10, collection="books")
+#torrent_collection.populate(count=10, collection="books")
 #torrent_collection.populate(count=10, collection="scimag")
 #torrent_collection.populate(count=10, collection="fiction")
 
