@@ -21,6 +21,14 @@ dbdump:
 	bash tools/dbdump.sh
 
 
+####################
+### setup things ###
+####################
+
+env:
+	echo sjsiojsiosiosjoisiojs
+
+
 ##################
 ### dev things ###
 ##################
