@@ -125,7 +125,7 @@ class Torrent:
     def get_from_file(self):
         if self.full_path.is_file():
             # print(f"[debug] found f{self.full_path} in dir")
-            return "found"
+            return
 
         for _ in range(self.HTTP_GET_RETRY + 1):
             r, retry, success = self.get_http()

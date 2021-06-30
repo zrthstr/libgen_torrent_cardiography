@@ -33,4 +33,4 @@ json = "output/torrent.json"
 	scraper_loglevel = "WARNING"
 
 [torrent_fetch]
-	http_get_retry = 2
+	http_get_retry = 4
