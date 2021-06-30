@@ -14,8 +14,12 @@ jobs:
 #          poetry-version: ${{ matrix.poetry-version }}
       - name: make env - run poetry install
         run: make env
+
       - name: run main programm
         run: make mgmt
+
+      - name: git st
+        run: git st
 
 
 
