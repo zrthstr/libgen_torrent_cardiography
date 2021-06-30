@@ -185,6 +185,7 @@ class Torrent_collection:
         return maximas, timeouts, successful_trackers
 
     def save_result(self, max_results, timeouts, successful_trackers):
+        print("Debug save_results", len(max_results), len(timeouts), len(successful_trackers))
 
         successful_and_timeout = set(successful_trackers) & set(timeouts)
         if successful_and_timeout:
@@ -269,7 +270,6 @@ class Torrent_collection:
                 order_by="scrape_success_last", _limit=limit
             )
             oldest_n_ih = [t["infohash"] for t in oldest_n]
-            # print(oldest_n_ih)
             self.tracker_scrape(oldest_n_ih)
 
     def chk_for_new(self):
