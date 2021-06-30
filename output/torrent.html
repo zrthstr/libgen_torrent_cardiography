@@ -1,0 +1,60 @@
+<!doctype html>
+<title> Torrent Health Tracker  </title>
+
+<style>
+    body {
+        font-family: 'Verdana', 'Geneva', 'Tahoma', sans-serif;
+    }
+    table tr:hover {
+        background-color: #ccc;
+    }
+    table td {
+        padding: .25em 1em;
+        border-bottom: 1px solid #333;
+    }
+    table td:nth-child(1) {
+        font-family: 'Courier New', 'Courier', monospace;
+    }
+</style>
+<!--
+	<script>
+    $(document).ready(function() {
+        Array.from(document.querySelectorAll("table")).forEach(function(t) {
+            new Tablesort(t);
+        })
+    })
+</script>
+-->
+
+
+<section class="content">
+  <header>
+    
+  <h1> Torrent Health Tracker </h1>
+	<h4> Updated: 2021-06-30 20:07:35.395767 UTC
+	
+	<a style="float: right;" href="./torrent.json">(download as json)</a>
+	</h4>
+
+  </header>
+  
+
+<table>
+    <thead>
+        <th>Info Hash</th>
+<!--    <th data-sort-method="number" data-sort-default="">Name</th> -->
+        <th>Link</th>
+        <th>Type</th>
+        <th>Size</th>
+        <th data-sort-method="number">Seeders</th>
+        <th data-sort-method="number">Leechers</th>
+       <!--    <th data-sort-method="number">Scraped</th> -->
+        <th>Last Updated</th>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+
+
+</section>
