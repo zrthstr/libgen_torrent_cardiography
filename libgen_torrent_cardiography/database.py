@@ -32,7 +32,7 @@ class Database:
         ### ID is not uniq
         ### infohash is uniq!
         ###
-        ### it is only uniq per collection
+        ### id is only uniq per collection
         ### id referes to the libgen id, not "a db id"
 
         if self.torrent.find_one() is None:
@@ -70,7 +70,6 @@ class Database:
             self.count_and_print(table)
 
     def integrety_chk(self):
-        # print("this __SHOULD__ be and integrety check")
         ### make sure:
         ### * no torrents have been skipped
         ### * ID and file_name fitt

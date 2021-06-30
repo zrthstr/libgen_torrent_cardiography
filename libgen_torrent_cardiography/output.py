@@ -74,7 +74,7 @@ class Output:
         with open(self.OUT_JSON, "w") as fd:
             fd.write(json_out)
 
-    # def generate_html(self, extened=False, collections="all", max_seed=3):
+
     def generate_html(self, data):
         file_loader = FileSystemLoader("templates")
         env = Environment(loader=file_loader)
@@ -86,7 +86,7 @@ class Output:
         with open(self.OUT_HTML, "w") as fd:
             fd.write(output)
 
-    # def generate(self, extended=False):
+
     def generate(self):
         data = self.kneed_data()
         self.generate_html(data)
