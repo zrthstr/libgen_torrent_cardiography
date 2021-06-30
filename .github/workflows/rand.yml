@@ -4,24 +4,30 @@ jobs:
   date:
     runs-on: ubuntu-latest
     steps:
-      # Checkout the branch
-      - name: checkout
-        uses: actions/checkout@v2-beta # use either @v2-beta or @master. Eventually there will be a @v2 tag.
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Run image
+        uses: abatilo/actions-poetry@v2.0.0
+#        #with:
+#          poetry-version: ${{ matrix.poetry-version }}
+      - name: make env - run poetry
+        run: make env
 
-      - name: save current date
-        run: |
-          # do some operation that changes a file in the git repo
-          date > time.txt
 
-      - name: setup git config
-        run: |
-          # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
-          git config user.name "GitHub Actions Bot"
-          git config user.email "<foo@bar.com>"
-
-      - name: commit
-        run: |
-          # Stage the file, commit and push
-          git add time.txt
-          git commit -m "new date commit"
-          git push origin master
+#      - name: save current date
+#        run: |
+#          date > time.txt
+#
+#      - name: setup git config
+#        run: |
+#          git config user.name "GitHub Actions Bot"
+#          git config user.email "<foo@bar.com>"
+#
+#      - name: commit
+#        run: |
+#          echo cool
+#          echo git add time.txt
+#          echo git commit -m "new date commit"
+#          echo git push origin master
