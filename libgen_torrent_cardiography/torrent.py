@@ -128,6 +128,7 @@ class Torrent:
             return
 
         for _ in range(self.HTTP_GET_RETRY + 1):
+            print("trying to fetch file form http ")
             r, retry, success = self.get_http()
             if retry is False:
                 break
