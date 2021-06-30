@@ -26,8 +26,7 @@ dbdump:
 ####################
 
 env:
-	echo sjsiojsiosiosjoisiojs
-
+	poetry install
 
 ##################
 ### dev things ###
