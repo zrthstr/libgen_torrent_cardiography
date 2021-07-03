@@ -1,6 +1,8 @@
 # Monitor Library Genesis and Sci-Hub' torrent health
 Track the number of seeders per torrent using various sources and generate https://zrthstr.github.io/libgen_torrent_cardiography/index.html and https://zrthstr.github.io/libgen_torrent_cardiography/torrent.json
 
+this project is inspired by https://phillm.net/libgen-stats-table-raw.php and also borrows its html form said website
+
 ## About LG data and torrents
 * stats http://libgen.lc/stat.php
 * libgen consists of a few different catalogues of files
