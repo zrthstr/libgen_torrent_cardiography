@@ -5,8 +5,8 @@ r_000.torrent
 #output/
 libgen-stats-formatted.php
 
-data
-!/data/ltc.sqlite
+data/torrent/
+data/torrent_many/
 
 #/data/ltc.sqlite-shm
 #/data/ltc.sqlite-wal
