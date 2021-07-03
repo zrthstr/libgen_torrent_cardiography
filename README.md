@@ -5,7 +5,7 @@ Track the number of seeders per torrent using various sources
 * stats http://libgen.lc/stat.php
 * libgen consists of a few different catalogues of files
 there appear to be:
-  standards, comics, fiction, magazines, scimag, fiction_rus
+  books, standards, comics, fiction, magazines, scimag, fiction_rus
 
 ### scimag aka "sci-hub"
 * http://libgen.gs/scimag/index.php?s=test
