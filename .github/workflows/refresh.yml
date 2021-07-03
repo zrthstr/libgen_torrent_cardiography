@@ -32,6 +32,9 @@ jobs:
       - name: git commit
         run: git commit -m "auto update at $(date)"
 
+      - name: git push
+        run: git push
+
 
 
 #      - name: save current date
