@@ -34,17 +34,3 @@ jobs:
 
       - name: git push
         run: git push
-
-
-
-#      - name: save current date
-#        run: |
-#          date > time.txt
-#
-#
-#      - name: commit
-#        run: |
-#          echo cool
-#          echo git add time.txt
-#          echo git commit -m "new date commit"
-#          echo git push origin master
