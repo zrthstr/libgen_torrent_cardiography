@@ -285,7 +285,8 @@ class Scraper:
 
         logger.info(f"Scraping infohashes: {self.good_infohashes}")
 
-        p = Pool()
+        #p = Pool()
+        p = Pool(6)
         results = p.map_async(self.scrape_tracker, self.trackers)
         p.close()
         while True:
