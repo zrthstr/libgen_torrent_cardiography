@@ -14,19 +14,19 @@ there appear to be:
 * more than 85,483,812 papers
 * src and example: http://gen.lib.rus.ec/scimag/repository_torrent/sm_00000000-00099999.torrent
 
-### f aka "fiction"
+### fiction ka "f"
 * 1000 files are on torrent
 * see http://libgen.rs/fiction/repository_torrent/
 * f -> fiction
 * f_0 - f_2327000.torrent
 
-### r aka "books"
+### books aka "r" 
 * http://libgen.rs/repository_torrent/
 * r -> ???????
 * t_000.torrent - r_2999000.torrent
 
 ### magazines (external)
-* 580 290 files
+* 580290 files
 * 13.496 terabytes
 * apparently, see http://magzdb.org/
 
