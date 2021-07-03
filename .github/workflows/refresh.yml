@@ -18,6 +18,11 @@ jobs:
       - name: run main programm
         run: make mgmt
 
+      - name: setup git config
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<gh@gh.gh>"
+
       - name: git st
         run: git status
 
@@ -33,10 +38,6 @@ jobs:
 #        run: |
 #          date > time.txt
 #
-#      - name: setup git config
-#        run: |
-#          git config user.name "GitHub Actions Bot"
-#          git config user.email "<foo@bar.com>"
 #
 #      - name: commit
 #        run: |
