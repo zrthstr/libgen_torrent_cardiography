@@ -11,13 +11,17 @@ db = Database(config)
 # db.integrety_chk()
 # db.info()
 
-def run_for(minutes):
-    end = datetime.now() + timedelta(minutes=minutes)
-    while end < datetime.now():
-        run()
+def run_for(minutes=0,seconds=1):
+    print("run for")
+    end = datetime.now() + timedelta(minutes=minutes, seconds=seconds)
+    while end > datetime.now():
+        #run()
+        print("runnig")
+        import time
+        time.sleep(1)
 
 
-def run()
+def run():
     for loop in range(100):
         for collection in ["books", "scimag", "fiction"]:
             torrent_collection.populate(count=30, collection=collection)
@@ -43,6 +47,6 @@ output = Output(torrent_collection)
 # torrent_collection.info()
 # torrent_collection.peer_crawl(1)
 
-run_for(4)
+run_for(minutes=50, seconds=0)
 
 output.generate()
