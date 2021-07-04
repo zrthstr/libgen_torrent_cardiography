@@ -18,13 +18,12 @@ def run_for(minutes=0,seconds=1):
     end = datetime.now() + timedelta(minutes=minutes, seconds=seconds)
     while end > datetime.now():
         run()
-        break
 
 
 def run():
 #for loop in range(100):
     for collection in ["books", "scimag", "fiction"]:
-        torrent_collection.populate(count=90, collection=collection)
+        #torrent_collection.populate(count=90, collection=collection)
         torrent_collection.peer_crawl(1)
 
 
