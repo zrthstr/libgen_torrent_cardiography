@@ -26,7 +26,6 @@ def run():
     for collection in ["books", "scimag", "fiction"]:
         torrent_collection.populate(count=90, collection=collection)
         torrent_collection.peer_crawl(1)
-        break
 
 
 torrent_collection = Torrent_collection(db, config)
