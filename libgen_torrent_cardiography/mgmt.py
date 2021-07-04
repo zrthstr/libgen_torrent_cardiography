@@ -21,31 +21,24 @@ def run_for(minutes=0,seconds=1):
 
 
 def run():
-    for loop in range(100):
-        for collection in ["books", "scimag", "fiction"]:
-            torrent_collection.populate(count=30, collection=collection)
-            torrent_collection.peer_crawl(1)
+#for loop in range(100):
+    for collection in ["books", "scimag", "fiction"]:
+        #torrent_collection.populate(count=30, collection=collection)
+        torrent_collection.peer_crawl(1)
 
 
 torrent_collection = Torrent_collection(db, config)
-output = Output(torrent_collection)
 
-#torrent_collection.peer_crawl(1)
-
-#output.generate()
-
+# torrent_collection.peer_crawl(1)
 # torrent_collection.info()
 # torrent_collection._load_all_from_db()
-
-# exit()
-
-#torrent_collection.populate(count=10, collection="books")
-#torrent_collection.populate(count=10, collection="scimag")
-#torrent_collection.populate(count=10, collection="fiction")
-
+# torrent_collection.populate(count=10, collection="books")
+# torrent_collection.populate(count=10, collection="scimag")
+# torrent_collection.populate(count=10, collection="fiction")
 # torrent_collection.info()
 # torrent_collection.peer_crawl(1)
 
-run_for(minutes=50, seconds=0)
+run_for(minutes=2, seconds=0)
 
+output = Output(torrent_collection)
 output.generate()
