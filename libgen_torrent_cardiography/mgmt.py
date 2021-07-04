@@ -1,3 +1,5 @@
+
+import time
 from database import Database
 from datetime import datetime, timedelta
 
@@ -15,10 +17,7 @@ def run_for(minutes=0,seconds=1):
     print("run for")
     end = datetime.now() + timedelta(minutes=minutes, seconds=seconds)
     while end > datetime.now():
-        #run()
-        print("runnig")
-        import time
-        time.sleep(1)
+        run()
 
 
 def run():
