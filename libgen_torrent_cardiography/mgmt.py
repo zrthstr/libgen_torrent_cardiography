@@ -30,9 +30,9 @@ output = Output(torrent_collection)
 # torrent_collection.info()
 # torrent_collection.peer_crawl(1)
 
-for loop in range(1):
+for loop in range(10):
     for collection in ["books", "scimag", "fiction"]:
-        torrent_collection.peer_crawl(1)
+        torrent_collection.peer_crawl(10)
         torrent_collection.populate(count=30, collection=collection)
 
 output.generate()
