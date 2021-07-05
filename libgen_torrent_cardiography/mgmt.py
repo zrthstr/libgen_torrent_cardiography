@@ -38,7 +38,7 @@ torrent_collection = Torrent_collection(db, config)
 # torrent_collection.info()
 # torrent_collection.peer_crawl(1)
 
-run_for(minutes=2, seconds=0)
+run_for(minutes=40, seconds=0)
 
 output = Output(torrent_collection)
 output.generate()
