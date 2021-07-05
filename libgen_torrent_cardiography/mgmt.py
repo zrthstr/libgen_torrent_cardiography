@@ -14,7 +14,6 @@ db = Database(config)
 # db.info()
 
 def run_for(minutes=0,seconds=1):
-    print("run for")
     end = datetime.now() + timedelta(minutes=minutes, seconds=seconds)
     while end > datetime.now():
         run()
@@ -38,7 +37,7 @@ torrent_collection = Torrent_collection(db, config)
 # torrent_collection.info()
 # torrent_collection.peer_crawl(1)
 
-#run_for(minutes=20, seconds=0)
+run_for(minutes=20, seconds=0)
 
 #from torrent import Torrent
 #t = Torrent(10, "books", db, config)
