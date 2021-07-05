@@ -38,7 +38,11 @@ torrent_collection = Torrent_collection(db, config)
 # torrent_collection.info()
 # torrent_collection.peer_crawl(1)
 
-run_for(minutes=20, seconds=0)
+#run_for(minutes=20, seconds=0)
+
+#from torrent import Torrent
+#t = Torrent(10, "books", db, config)
+#t.info()
 
 output = Output(torrent_collection)
 output.generate()
