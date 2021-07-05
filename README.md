@@ -13,18 +13,18 @@ there appear to be:
 * http://libgen.gs/scimag/index.php?s=test
 * also currently https://sci-hub.do/
 * source http://gen.lib.rus.ec/scimag/repository_torrent/
-* 100k files in one torrent
+* 100k files per torrent
 * more than 85,483,812 papers
 * example sm_00000000-00099999.torrent
 
 ### fiction aka "f"
-* 1000 files in one torrent
+* 1000 files per torrent
 * source http://libgen.rs/fiction/repository_torrent/
 * aprox 2.6m files/books
 * f_0 - f_2327000.torrent
 
 ### books aka "r" 
-* 1000 files in one torrent
+* 1000 files per torrent
 * source http://libgen.rs/repository_torrent/
 * aprox 3m files/books
 * t_000.torrent - r_2999000.torrent
