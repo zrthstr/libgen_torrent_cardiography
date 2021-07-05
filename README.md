@@ -1,4 +1,4 @@
-# Monitor Library Genesis and Sci-Hub's torrent health
+# Monitor Library Genesis' and Sci-Hub's torrent health
 This GitHub repository generates https://zrthstr.github.io/libgen_torrent_cardiography/index.html and [torrent.json](https://zrthstr.github.io/libgen_torrent_cardiography/torrent.json) with the help of GitHub Actions, tracking the number of seeders per torrent.
 
 This project is inspired by https://phillm.net/libgen-stats-table-raw.php and also borrows some of its html.
@@ -16,7 +16,7 @@ there appear to be:
 * more than 85,483,812 papers
 * src and example: http://gen.lib.rus.ec/scimag/repository_torrent/sm_00000000-00099999.torrent
 
-### fiction ka "f"
+### fiction aka "f"
 * 1000 files are on torrent
 * see http://libgen.rs/fiction/repository_torrent/
 * f -> fiction
@@ -37,7 +37,7 @@ there appear to be:
 
 
 
-### there are a few ways to find seeder/peers
+### there are a few ways to find seeders/peers
 * DHT/PEX
 * from trackers
   * TCP/HTTP
@@ -45,7 +45,7 @@ there appear to be:
 * LSD - Local Service Discovery (BEP14)
 
 ### rand info
-* https://libgen.life/ Some comunity forum
+* https://libgen.life/ Some community forum
 * https://news.ycombinator.com/item?id=21692222
 * UDP NAT PUNCH https://github.com/inconshreveable/ngrok/issues/26#issuecomment-69535251
 * https://en.wikipedia.org/wiki/Kademlia
