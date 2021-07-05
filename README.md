@@ -12,17 +12,18 @@ there appear to be:
 ### scimag aka "sci-hub"
 * http://libgen.gs/scimag/index.php?s=test
 * also currently https://sci-hub.do/
-* 100k files in torrent
+* 100k files in one torrent
 * more than 85,483,812 papers
 * src and example: http://gen.lib.rus.ec/scimag/repository_torrent/sm_00000000-00099999.torrent
 
 ### fiction aka "f"
-* 1000 files are on torrent
+* 1000 files in one torrent
 * see http://libgen.rs/fiction/repository_torrent/
 * f -> fiction
 * f_0 - f_2327000.torrent
 
 ### books aka "r" 
+* 1000 files in one torrent
 * http://libgen.rs/repository_torrent/
 * r -> ???????
 * t_000.torrent - r_2999000.torrent
