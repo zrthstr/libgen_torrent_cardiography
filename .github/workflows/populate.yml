@@ -2,7 +2,11 @@ name: populate and push
 #on: push
 on:
   workflow_dispatch:
-#    - cron: '0 * * * *'
+    inputs:
+      name:
+        description: 'idk'
+        required: true
+        default: 'iiddkk'
 
 jobs:
   populate_torrents:
