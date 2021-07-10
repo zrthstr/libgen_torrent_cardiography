@@ -51,7 +51,7 @@ class Torrent_collection:
     def newest(self, collection):
         last = self.db.torrent.find_one(order_by="-id", collection=collection)
         if last is None:
-            return 0
+            return -1
         else:
             return last["id"]
 
@@ -81,6 +81,7 @@ class Torrent_collection:
 
             tor = Torrent(next_one, collection, self.db, self.config)
             self.members.append(tor)
+
 
     def is_known_missing(self, newest, collection):
         return newest * 1000 in self.config["catalogue"][collection]["known_missing"]

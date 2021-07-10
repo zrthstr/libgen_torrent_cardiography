@@ -26,7 +26,7 @@ info:
 rm_mgmt_db:
 	rm data/ltc.sqlite || true
 
-restart: rm_mgmt_db mgmt
+restart: rm_mgmt_db populate
 
 dbinfo:
 	bash tools/dbinfo.sh

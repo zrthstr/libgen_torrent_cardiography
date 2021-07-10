@@ -70,9 +70,9 @@ if __name__ == "__main__":
         sys.exit()
 
     if options["populate"]:
-        torrent_collection.populate(count=10, collection="books")
-        torrent_collection.populate(count=1000, collection="scimag")
-        torrent_collection.populate(count=10, collection="fiction")
+        torrent_collection.populate(count=20, collection="books")
+        torrent_collection.populate(count=20, collection="scimag")
+        torrent_collection.populate(count=20, collection="fiction")
 
     if options["scrape"]:
         run_for(minutes=20, seconds=0)
