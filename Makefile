@@ -7,6 +7,10 @@ mgmt:
 	# Merge main db file with wal
 	sqlite3 data/ltc.sqlite  VACUUM;
 
+.PHONY: output
+output:
+	poetry run python libgen_torrent_cardiography/mgmt.py output
+
 #################
 ### db things ###
 #################

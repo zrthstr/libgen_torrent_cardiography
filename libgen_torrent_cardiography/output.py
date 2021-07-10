@@ -69,6 +69,12 @@ class Output:
         for d in data:
             del d["last_updated"]
 
+            d["dht_peers"] = -1
+            d["dht_scraped"] = -1
+            #print("dht_peers", d["dht_peers"])
+            #print("dht_scraped", d["dht_scraped"])
+
+
         json_out = json.dumps(data)
 
         with open(self.OUT_JSON, "w") as fd:
