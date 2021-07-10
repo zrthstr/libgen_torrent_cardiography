@@ -1,18 +1,11 @@
-# from collections import defaultdict
-# import libtorrent as lt
 from datetime import datetime
 from parse import parse
-
-# import requests
+from collections import defaultdict
 
 from tracker import Tracker, Tracker_collection
 from torrent import Torrent
 
 from lib.ttsfix import scraper
-
-# TODO:
-# dont exit in scraper response parsing code,
-# log error and continue
 
 
 class Torrent_collection:
@@ -29,17 +22,21 @@ class Torrent_collection:
             tor.info()
             print()
 
-    def stats(self):
-        from collections import defaultdict
-        print("Stats: ")
-        print(f"Number of torrents: {len(self.members)}")
-
+    def get_stats(self):
         counts = defaultdict(int)
+        counts["total"] = len(self.members)
         for tor in self.members:
             counts[tor.collection] += 1
 
+        return counts
+
+
+    def stats(self):
+        counts = get_stats(self)
+        print("Stats: ")
+        print(f"Number of torrents: {counts['total']}")
         for k,v in counts.items():
-            print(f"\t{k}: {v}")
+            stats += f"\t{k}: {v}"
 
 
     def _load_all_from_db(self):

@@ -36,6 +36,7 @@ class Output:
         self.config = torrent_collection.config
         self.OUT_HTML = self.config["output"]["html"]
         self.OUT_JSON = self.config["output"]["json"]
+        self.OUT_STATS = self.config["output"]["stats"]
 
     def kneed_data(self):
         out = []
@@ -87,9 +88,19 @@ class Output:
         template = env.get_template("torrent.html")
 
         output = template.render(data=data, update_time=datetime.utcnow())
-
-        # print(output)
         with open(self.OUT_HTML, "w") as fd:
+            fd.write(output)
+
+
+    def generate_stats(self):
+        stats = self.torrent_collection.get_stats()
+        print(stats)
+        file_loader = FileSystemLoader("templates")
+        env = Environment(loader=file_loader)
+        template = env.get_template("stats.html")
+
+        output = template.render(stats=stats, update_time=datetime.utcnow())
+        with open(self.OUT_STATS, "w") as fd:
             fd.write(output)
 
 
@@ -97,3 +108,4 @@ class Output:
         data = self.kneed_data()
         self.generate_html(data)
         self.generate_json(data)
+        self.generate_stats()

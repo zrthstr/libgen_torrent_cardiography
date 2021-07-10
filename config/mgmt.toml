@@ -4,6 +4,7 @@ connection = "sqlite:///data/ltc.sqlite"
 [output]
 html = "output/torrent.html"
 json = "output/torrent.json"
+stats = "output/stats.html"
 
 [catalogue]
 

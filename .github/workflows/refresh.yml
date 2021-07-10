@@ -30,7 +30,7 @@ jobs:
         run: git status
 
       - name: git add
-        run: git add -f data/ltc.sqlite output/torrent.json output/torrent.html
+        run: git add -f data/ltc.sqlite output/torrent.json output/torrent.html output/stats.html
 
       - name: git commit
         run: git commit -m "auto update at $(date)"
