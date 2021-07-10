@@ -26,6 +26,21 @@ class Torrent_collection:
         print("Info: ")
         for tor in self.members:
             print(tor)
+            tor.info()
+            print()
+
+    def stats(self):
+        from collections import defaultdict
+        print("Stats: ")
+        print(f"Number of torrents: {len(self.members)}")
+
+        counts = defaultdict(int)
+        for tor in self.members:
+            counts[tor.collection] += 1
+
+        for k,v in counts.items():
+            print(f"\t{k}: {v}")
+
 
     def _load_all_from_db(self):
         return [
@@ -184,6 +199,7 @@ class Torrent_collection:
 
         return maximas, timeouts, successful_trackers
 
+
     def save_result(self, max_results, timeouts, successful_trackers):
         print("Debug save_results", len(max_results), len(timeouts), len(successful_trackers))
 
@@ -218,6 +234,7 @@ class Torrent_collection:
         # fresh out objects
         self._load_all_from_db()
 
+
     def tracker_scrape(self, info_hash_list):
         tracker_collection = Tracker_collection(self.db)
         all_tracker = tracker_collection.all()
@@ -242,6 +259,7 @@ class Torrent_collection:
             successful_trackers, add_postfix=True
         )
         self.save_result(maximas_lst, timeouts, successful_trackers)
+
 
     def unscramble(self, maximas):
         """we get several list of dictinaries containig our results from the scraper

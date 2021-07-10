@@ -11,6 +11,9 @@ mgmt:
 output:
 	poetry run python libgen_torrent_cardiography/mgmt.py output
 
+info:
+	poetry run python libgen_torrent_cardiography/mgmt.py info
+
 #################
 ### db things ###
 #################
@@ -38,12 +41,12 @@ env:
 ### dev things ###
 ##################
 
-info:
+dev_info:
 	poetry run python examples/info.py
 
-lbt:
+dev_lbt:
 	poetry run python examples/lbt_info.py
 
-peers:
+dev_peers:
 	poetry run python examples/fetch_peers.py
 
