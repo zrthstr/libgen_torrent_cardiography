@@ -230,7 +230,12 @@ class Torrent_collection:
             self.db.torrent.update(res, ["infohash"], return_count=True, ensure=False)
 
         # fresh out objects
-        self._load_all_from_db()
+        #self._load_all_from_db()
+        #### TODO
+        #### TODO
+        #### TODO
+        #### TODO
+        self.members = self._load_all_from_db()
 
 
     def tracker_scrape(self, info_hash_list):
