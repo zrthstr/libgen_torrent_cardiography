@@ -58,9 +58,9 @@ class Torrent_collection:
     def is_not_existent(self, next_one, collection):
         next_one *= 1000
         if collection == "scimag":
-            next_one *= 1000
-        #print("next_one", next_one)
-        #print("AN: ", self.config["catalogue"][collection]["not_yet_existent"])
+            next_one *= 100
+        a = next_one >= self.config["catalogue"][collection]["not_yet_existent"]
+
         return next_one >= self.config["catalogue"][collection]["not_yet_existent"]
 
     # TODO: clean paramters

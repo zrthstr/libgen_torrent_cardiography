@@ -71,7 +71,7 @@ if __name__ == "__main__":
 
     if options["populate"]:
         torrent_collection.populate(count=10, collection="books")
-        torrent_collection.populate(count=100, collection="scimag")
+        torrent_collection.populate(count=1000, collection="scimag")
         torrent_collection.populate(count=10, collection="fiction")
 
     if options["scrape"]:
