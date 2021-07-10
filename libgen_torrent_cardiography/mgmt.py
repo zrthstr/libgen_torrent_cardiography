@@ -36,13 +36,13 @@ if __name__ == "__main__":
         usage()
 
 
-    options = {
-            info: False,
-            scrape: False,
-            populate: False,
-            output: False,
-            help: False,
-            }
+    options = dict(
+            info = False,
+            scrape = False,
+            populate = False,
+            output = False,
+            help = False,
+            )
 
     for k,v in options.items():
         if k in sys.argv:
