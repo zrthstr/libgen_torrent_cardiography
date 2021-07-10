@@ -26,7 +26,7 @@ def run():
         #torrent_collection.populate(count=90, collection=collection)
         torrent_collection.peer_crawl(1)
 
-def usage()
+def usage():
     print("TBD")
     sys.exit()
 
