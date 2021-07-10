@@ -1,7 +1,7 @@
 name: populate and push
 #on: push
-#on:
-#  schedule:
+on:
+  workflow_dispatch:
 #    - cron: '0 * * * *'
 
 jobs:
