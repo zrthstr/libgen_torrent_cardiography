@@ -1,5 +1,3 @@
-
-
 name: scrape and generate and push
 #on: push
 on:
@@ -19,8 +17,10 @@ jobs:
 #          poetry-version: ${{ matrix.poetry-version }}
       - name: make env - run poetry install
         run: make env
+
       - name: scrape trackers and update output
         run: make scrape
+
       - name: setup git config
         run: |
           git config user.name "GitHub Actions Bot"

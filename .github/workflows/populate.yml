@@ -1,13 +1,11 @@
-
-
-name: scrape and generate and push
+name: populate and push
 #on: push
 #on:
 #  schedule:
 #    - cron: '0 * * * *'
 
 jobs:
-  update_data:
+  populate_torrents:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

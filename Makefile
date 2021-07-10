@@ -3,12 +3,12 @@
 ############
 
 scrape:
-	poetry run python libgen_torrent_cardiography/mgmt.py
+	poetry run python libgen_torrent_cardiography/mgmt.py scrape output
 	# Merge main db file with wal
 	sqlite3 data/ltc.sqlite  VACUUM;
 
 populate:
-	poetry run python libgen_torrent_cardiography/mgmt.py skip_run populate
+	poetry run python libgen_torrent_cardiography/mgmt.py populate
 	# Merge main db file with wal
 	sqlite3 data/ltc.sqlite  VACUUM;
 
