@@ -4,7 +4,7 @@ name: scrape and generate and push
 #on: push
 on:
   schedule:
-    - cron: '12 * * * *'
+    - cron: '0 * * * *'
 jobs:
   update_data:
     runs-on: ubuntu-latest
