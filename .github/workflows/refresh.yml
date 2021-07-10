@@ -1,4 +1,4 @@
-name: scrape and generate and push
+name: scrape, generate and push
 #on: push
 on:
   schedule:
