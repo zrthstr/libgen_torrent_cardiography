@@ -39,8 +39,8 @@ there appear to be:
 * ???
 
 
-
 ### there are a few ways to find seeders/peers
+only `tracker/infowire` is currently implemented and running
 * DHT/PEX
 * from trackers
   * TCP/HTTP
