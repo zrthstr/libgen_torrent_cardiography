@@ -37,7 +37,7 @@ if __name__ == "__main__":
 
 
     options = ["info", "scrape", "populate", "output", "help"]
-    for opt in output:
+    for opt in options:
         if opt in sys.argv:
             options[opt] = True
         else:
