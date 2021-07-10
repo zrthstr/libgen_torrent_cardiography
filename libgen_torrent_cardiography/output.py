@@ -72,14 +72,6 @@ class Output:
 
             d["dht_peers"] = -1
             d["dht_scraped"] = -1
-            print(d["seeders"])
-
-            """
-            "seeders": null,
-            "leechers": null,
-            "completed": null,
-            "scraped_date": "n/a",
-            """
 
             #print("dht_peers", d["dht_peers"])
             #print("dht_scraped", d["dht_scraped"])
