@@ -28,7 +28,7 @@ def run():
 
 
 if __name__ == "__main__":
-    info, skip_run =  False, False
+    info, skip_run, populate =  False, False, False
 
     torrent_collection = Torrent_collection(db, config)
 
@@ -45,10 +45,11 @@ if __name__ == "__main__":
     # torrent_collection.peer_crawl(1)
     # torrent_collection.info()
     # torrent_collection._load_all_from_db()
-    
-    torrent_collection.populate(count=10, collection="books")
-    torrent_collection.populate(count=100, collection="scimag")
-    torrent_collection.populate(count=10, collection="fiction")
+
+    if populate:
+        torrent_collection.populate(count=10, collection="books")
+        torrent_collection.populate(count=100, collection="scimag")
+        torrent_collection.populate(count=10, collection="fiction")
 
     if info:
         torrent_collection.info()
