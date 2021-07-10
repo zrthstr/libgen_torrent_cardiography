@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       name:
-        description: 'idk'
+        description: 'dummy'
         required: true
-        default: 'iiddkk'
+        default: 'dummy'
 
 jobs:
   populate_torrents:

@@ -36,12 +36,17 @@ if __name__ == "__main__":
         usage()
 
 
-    options = ["info", "scrape", "populate", "output", "help"]
-    for opt in options:
-        if opt in sys.argv:
-            options[opt] = True
-        else:
-            options[opt] = False
+    options = {
+            info: False,
+            scrape: False,
+            populate: False,
+            output: False,
+            help: False,
+            }
+
+    for k,v in options.items():
+        if k in sys.argv:
+            options[k] = True
 
 
     torrent_collection = Torrent_collection(db, config)
