@@ -1,5 +1,5 @@
 # Monitor Library Genesis' and Sci-Hub's torrent health
-This GitHub repository generates https://zrthstr.github.io/libgen_torrent_cardiography/index.html and [torrent.json](https://zrthstr.github.io/libgen_torrent_cardiography/torrent.json) with the help of GitHub Actions, tracking the number of seeders per torrent.
+This GitHub [repository](https://github.com/zrthstr/libgen_torrent_cardiography/) generates https://zrthstr.github.io/libgen_torrent_cardiography/index.html and [torrent.json](https://zrthstr.github.io/libgen_torrent_cardiography/torrent.json) with the help of GitHub Actions, tracking the number of seeders per torrent.
 
 This project is inspired by https://phillm.net/libgen-stats-table-raw.php and also borrows some of its html,
 and is ment to be used via https://github.com/subdavis/libgen-seedtools.
