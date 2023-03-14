@@ -1,0 +1,14 @@
+_git/
+9fc20b9e98ea98b4a35e6223041a5ef94ea27809/
+__pycache__
+r_000.torrent
+#output/
+libgen-stats-formatted.php
+
+!data/ltc.sqlite
+data/
+
+#/data/ltc.sqlite-shm
+#/data/ltc.sqlite-wal
+#/data/torrent
+#/data/torrent_many

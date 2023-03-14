@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "libgen_torrent_cardiography"
+version = "0.1.0"
+description = ""
+authors = ["love <love@love.net>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+beautifulsoup4 = "^4.9.3"
+requests = "^2.25.1"
+torrentool = "^1.1.1"
+torrent-tracker-scraper = "^3.1.2"
+"bencode.py" = "^4.0.0"
+bencoding = "^0.2.6"
+python-libtorrent-bin = "^2.0.2"
+dataset = "^1.5.0"
+toml = "^0.10.2"
+parse = "^1.19.0"
+Jinja2 = "^3.0.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
