@@ -1,0 +1,35 @@
+<!doctype html>
+<title> Torrent Health Tracker  </title>
+
+<style>
+    body {
+        font-family: 'Verdana', 'Geneva', 'Tahoma', sans-serif;
+    }
+    table tr:hover {
+        background-color: #ccc;
+    }
+    table td {
+        padding: .25em 1em;
+        border-bottom: 1px solid #333;
+    }
+    table td:nth-child(1) {
+        font-family: 'Courier New', 'Courier', monospace;
+    }
+</style>
+<script src="./docs/lib/jquery.min.js"></script>
+<script src="./docs/lib/tablesort.min.js"></script>
+<script src="./docs/lib/tablesort.number.min.js"></script>
+	<script>
+    $(document).ready(function() {
+        Array.from(document.querySelectorAll("table")).forEach(function(t) {
+            new Tablesort(t);
+        })
+    })
+</script>
+
+<section class="content">
+  <header>
+    {% block header %}{% endblock %}
+  </header>
+  {% block content %}{% endblock %}
+</section>

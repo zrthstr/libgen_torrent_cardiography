@@ -1,0 +1,44 @@
+name: populate and push
+#on: push
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'dummy'
+        required: true
+        default: 'dummy'
+
+jobs:
+  populate_torrents:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Run image
+        uses: abatilo/actions-poetry@v2.0.0
+#        #with:
+#          poetry-version: ${{ matrix.poetry-version }}
+      - name: make env - run poetry install
+        run: make env
+
+      - name: populate - find new torrents
+        run: make populate
+
+      - name: setup git config
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<gh@gh.gh>"
+
+      - name: git st
+        run: git status
+
+      - name: git add
+        run: git add -f data/ltc.sqlite output/torrent.json output/torrent.html
+
+      - name: git commit
+        run: git commit -m "auto update at $(date)"
+
+      - name: git push
+        run: git push

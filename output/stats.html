@@ -1,0 +1,75 @@
+<!doctype html>
+<title> Torrent Health Tracker  </title>
+
+<style>
+    body {
+        font-family: 'Verdana', 'Geneva', 'Tahoma', sans-serif;
+    }
+    table tr:hover {
+        background-color: #ccc;
+    }
+    table td {
+        padding: .25em 1em;
+        border-bottom: 1px solid #333;
+    }
+    table td:nth-child(1) {
+        font-family: 'Courier New', 'Courier', monospace;
+    }
+</style>
+<script src="./docs/lib/jquery.min.js"></script>
+<script src="./docs/lib/tablesort.min.js"></script>
+<script src="./docs/lib/tablesort.number.min.js"></script>
+	<script>
+    $(document).ready(function() {
+        Array.from(document.querySelectorAll("table")).forEach(function(t) {
+            new Tablesort(t);
+        })
+    })
+</script>
+
+<section class="content">
+  <header>
+    
+<h1> Torrent Health Tracker <a style="float: right;"> Updated: 2024-10-24 12:21:02.133579 UTC </a>
+</h1>
+<h4> <a href="./README">(about</a> | <a href="https://github.com/zrthstr/libgen_torrent_cardiography">code |<a href=./index.html> index</a> )</a>
+<a style="float: right;" href="./torrent.json">(download as json)</a>
+</h4>
+
+
+  </header>
+  
+<center>
+<table>
+  <thead>
+      <th>Collection</th>
+      <th>Torrent Count</th>
+  </thead>
+  <tbody>
+</center>
+
+<tr>
+  <td>  total </td>
+  <td>  6241 </td>
+</tr>
+
+<tr>
+  <td>  books </td>
+  <td>  3024 </td>
+</tr>
+
+<tr>
+  <td>  scimag </td>
+  <td>  871 </td>
+</tr>
+
+<tr>
+  <td>  fiction </td>
+  <td>  2346 </td>
+</tr>
+
+    </tbody>
+</table>
+
+
+</section>

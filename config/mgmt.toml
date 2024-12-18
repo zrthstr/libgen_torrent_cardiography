@@ -1,0 +1,37 @@
+[db]
+connection = "sqlite:///data/ltc.sqlite"
+
+[output]
+html = "output/torrent.html"
+json = "output/torrent.json"
+stats = "output/stats.html"
+
+[catalogue]
+
+	[catalogue.books]
+	known_missing  = [81000, 82000]
+	base_url = "http://libgen.is/repository_torrent/"
+	dir = "data/torrent/books"
+	file_mask = "r_{:03}.torrent"
+	not_yet_existent = 3640000
+
+	[catalogue.fiction]
+	known_missing  = []
+	base_url = "http://libgen.rs/fiction/repository_torrent/"
+	dir = "data/torrent/fiction"
+	file_mask = "f_{:03}.torrent"
+	not_yet_existent = 26700000
+
+	[catalogue.scimag]
+	known_missing  = []
+	base_url = "http://gen.lib.rus.ec/scimag/repository_torrent/"
+	dir = "data/torrent/scimag"
+	file_mask = "sm_{:08}-{:08}.torrent"
+	not_yet_existent = 87600000
+
+[peersearch]
+	udp_batchsize = 60
+	scraper_loglevel = "WARNING"
+
+[torrent_fetch]
+	http_get_retry = 4
