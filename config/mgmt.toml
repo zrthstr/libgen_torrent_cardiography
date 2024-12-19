@@ -24,7 +24,7 @@ stats = "output/stats.html"
 
 	[catalogue.scimag]
 	known_missing  = []
-	base_url = "http://gen.lib.rus.ec/scimag/repository_torrent/"
+	base_url = "http://libgen.is/scimag/repository_torrent/"
 	dir = "data/torrent/scimag"
 	file_mask = "sm_{:08}-{:08}.torrent"
 	not_yet_existent = 87600000
