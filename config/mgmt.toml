@@ -20,7 +20,7 @@ stats = "output/stats.html"
 	base_url = "http://libgen.is/fiction/repository_torrent/"
 	dir = "data/torrent/fiction"
 	file_mask = "f_{:03}.torrent"
-	not_yet_existent = 26700000
+	not_yet_existent = 3045000
 
 	[catalogue.scimag]
 	known_missing  = []
